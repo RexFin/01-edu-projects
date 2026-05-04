@@ -47,14 +47,14 @@
         height: 100vh;
         color: var(--aquamarine);
         font-size: 100px;
-        text-shadow: 0 0 3px rgb(255, 255, 255);
+        text-shadow: 0 0 10px rgb(0, 238, 255);
         /* filter: drop-shadow(0 0 10px white); */
         z-index: 0;
         pointer-events: none;
     }
 
     .background-element-container {
-        position: relative;
+        position: absolute;
         width: 100%;
         height: 100%;
     }
@@ -65,32 +65,167 @@
         transform-origin: center;
     }
 
-    .background-element-container span:nth-child(1) { top: 10%; left: 5%; transform: rotate(15deg); }
-    .background-element-container span:nth-child(2) { top: 40%; left: 80%; transform: rotate(-25deg); }
+    /* [START] Animation for ASCII elements [START] */
+    .background-element-container span:nth-child(1) { top: 55%; left: 5%; transform: rotate(15deg); }
+    .background-element-container span:nth-child(2) { top: 40%; left: 90%; transform: rotate(-25deg); }
     .background-element-container span:nth-child(3) { top: 75%; left: 15%; transform: rotate(45deg); }
-    .background-element-container span:nth-child(4) { top: 20%; left: 45%; transform: rotate(-10deg); }
+    .background-element-container span:nth-child(4) { top: 5%; left: 60%; transform: rotate(-10deg); }
     .background-element-container span:nth-child(5) { top: 85%; left: 60%; transform: rotate(70deg); }
     .background-element-container span:nth-child(6) { top: 50%; left: 25%; transform: rotate(-60deg); }
-    .background-element-container span:nth-child(7) { top: 15%; left: 85%; transform: rotate(30deg); }
+    .background-element-container span:nth-child(7) { top: 5%; left: 80%; transform: rotate(30deg); }
     .background-element-container span:nth-child(8) { top: 65%; left: 85%; transform: rotate(-40deg); }
     .background-element-container span:nth-child(9) { top: 85%; left: 35%; transform: rotate(10deg); }
-    .background-element-container span:nth-child(10) { top: 30%; left: 10%; transform: rotate(-80deg); }
-    .background-element-container span:nth-child(11) { top: 40%; left: 50%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(10) { top: 30%; left: 70%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(11) { top: 10%; left: 10%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(12) { top: 20%; left: 20%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(13) { top: 20%; left: 30%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(14) { top: 15%; left: 40%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(15) { top: 25%; left: 50%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(16) { top: 50%; left: 50%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(17) { top: 60%; left: 60%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(18) { top: 60%; left: 70%; transform: rotate(-80deg); }
+
+    .anim-slow {animation: spin-cw 25s linear infinite}
+    .anim-medium {animation: spin-ccw 14s linear infinite}
+    .anim-fast {animation: spin-wobble 7s linear infinite}
+
+    @keyframes spin-cw {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-ccw {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(-360deg); }
+    }
+
+    @keyframes spin-wobble {
+        0% { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(180deg) scale(1.15); }
+        100% { transform: rotate(360deg) scale(1); }
+    }
+    /* [END] Animation for ASCII elements [END] */
+
+    .background-stars-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* [START] Animation for stars [START] */
+    .star {
+        position: absolute;
+        width: 120px; 
+        height: 2px;
+        background: linear-gradient(90deg, var(--aquamarine), transparent);
+        transform: rotate(-45deg);
+        opacity: 0;
+        animation: shooting-star linear infinite;
+    }
+
+
+    .star::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: #fff;
+        box-shadow: 0 0 10px 3px var(--aquamarine);
+    }
+
+    .star:nth-child(1) {
+        top: 10%;
+        left: 100%;
+        animation-duration: 2.5s;
+        animation-delay: 0s;
+    }
+
+    .star:nth-child(2) {
+        top: -20%;
+        left: 60%;
+        animation-duration: 2.5s;
+        animation-delay: 0.5s;
+    }
+
+    .star:nth-child(3) {
+        top: 0%;
+        left: 20%;
+        animation-duration: 3.5s;
+        animation-delay: 1.2s;
+    }
+
+    .star:nth-child(4) {
+        top: -10%;
+        left: 80%;
+        animation-duration: 2.8s;
+        animation-delay: 2.1s;
+    }
+
+    .star:nth-child(5) {
+        top: 25%;
+        left: 150%;
+        animation-duration: 1.5s;
+        animation-delay: 0.8s;
+    }
+
+    .star:nth-child(6) {
+        top: -10%;
+        left: 10%;
+        animation-duration: 5s;
+        animation-delay: 0s;
+    }
+
+    @keyframes shooting-star {
+        0% {
+            transform: rotate(-45deg) translateX(0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        80% {
+            opacity: 1;
+        }
+        100% {
+            transform: rotate(-45deg) translateX(-150vw);
+            opacity: 0;
+        }
+    }
+    /* [END] Animation for stars [END] */
 </style>
 <body>
     <div class="background press-start-2p-regular">
         <div class="background-element-container">
-            <span>!</span>
-            <span>@</span>
-            <span>#</span>
-            <span>$</span>
-            <span>%</span>
-            <span>&</span>
-            <span>*</span>
-            <span>!</span>
-            <span>@</span>
-            <span>#</span>
-            <span>$</span>
+            <span class="anim-slow">!</span>
+            <span class="anim-fast">@</span>
+            <span class="anim-medium">#</span>
+            <span class="anim-slow">$</span>
+            <span class="anim-fast">%</span>
+            <span class="anim-slow">&</span>
+            <span class="anim-medium">*</span>
+            <span class="anim-fast">!</span>
+            <span class="anim-slow">@</span>
+            <span class="anim-fast">#</span>
+            <span class="anim-medium">A</span>
+            <span class="anim-medium">S</span>
+            <span class="anim-fast">C</span>
+            <span class="anim-slow">I</span>
+            <span class="anim-fast">I</span>
+            <span class="anim-slow">A</span>
+            <span class="anim-fast">R</span>
+            <span class="anim-slow">T</span>
+        </div>
+        <div class="background-stars-container">
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
         </div>
     </div>
     <div id="container">
