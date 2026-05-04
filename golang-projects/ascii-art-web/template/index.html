@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII-ART-WEB</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Color palette */
+    :root {
+        --prussian-blue: #0b132b;
+        --space-indigo: #1C2541;
+        --dusk-blue: #3A506B;
+        --tropical-teal: #5BC0BE;
+        --aquamarine: #6FFFE9;
+    }
+
+    body {
+        background-color: var(--prussian-blue);
+    }
+
+    .press-start-2p-regular {
+        font-family: "Press Start 2P", system-ui;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    #container {
+        width: 80%;
+        height: 95vh;
+        margin: 0 auto;
+        border: 1px solid red;
+    }
+
+    .background {
+        position: fixed;
+        color: var(--aquamarine);
+        font-size: 50px;
+        text-shadow: 0 0 3px rgb(255, 255, 255);
+        /* filter: drop-shadow(0 0 10px white); */
+    }
+
+    .background span {
+        white-space: nowrap;
+    }
+</style>
+<body>
+    <div class="background press-start-2p-regular">
+        .background-element-container
+        <span>!</span>
+        <span>@</span>
+        <span>#</span>
+        <span>$</span>
+        <span>%</span>
+        <span>&</span>
+        <span>*</span>
+        <span>!</span>
+        <span>@</span>
+        <span>#</span>
+        <span>$</span>
+        <span>%</span>
+        <span>&</span>
+        <span>*</span>
+    </div>
+    <div id="container">
+        <div class="main-card">
+
+        </div>
+    </div>
+</body>
+</html>
