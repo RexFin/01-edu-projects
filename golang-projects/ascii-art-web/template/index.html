@@ -7,10 +7,12 @@
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Sixtyfour&display=swap');
 
     * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
 
     /* Color palette */
@@ -32,11 +34,8 @@
         font-style: normal;
     }
 
-    #container {
-        width: 80%;
-        height: 95vh;
-        margin: 0 auto;
-        border: 1px solid red;
+    .sixtyfour-reqular {
+        font-family: "Sixtyfour", sans-serif;
     }
 
     .background {
@@ -196,6 +195,124 @@
         }
     }
     /* [END] Animation for stars [END] */
+
+    #container {
+        position: fixed;
+        inset: 0px;
+        width: 50rem;
+        height: fit-content;
+        max-width: 100vw;
+        max-height: 100dvh;
+        border: 1px solid red;
+        margin: auto;
+    }
+
+    .main-card {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+    }
+
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+    }
+
+    .main-text {
+        font-size: 30px;
+        color: var(--aquamarine);
+        padding: 20px 0;
+        border-bottom: 5px double var(--dusk-blue);
+        border-top: 5px double var(--dusk-blue);
+        width: 100%;
+        text-align: center;
+    }
+
+    .subtext {
+        font-size: 20px;
+        color: var(--aquamarine);
+        padding-bottom: 20px;
+    }
+
+    .select-container {
+        display: flex;
+        color: var(--aquamarine);
+        align-items: center;
+        margin-top: 10px;
+        padding-bottom: 20px;
+    }
+
+    .select-button {
+        width: 50px;
+        height: 50px;
+        background-color: var(--space-indigo);
+        border: 3px outset var(--dusk-blue);
+        color: var(--aquamarine);
+        font-size: 20px;
+    }
+
+    .select-button:hover, .submit-btn:hover {
+        background-color: var(--dusk-blue);
+        color: white;
+        border: 3px outset var(--aquamarine);
+        cursor: pointer;
+    }
+
+    .select-button-text {
+        margin: 0 20px;
+        font-size: 20px;
+    }
+
+    .submit-btn-container {
+        width: 100%;
+        text-align: center;
+        border-bottom: 5px double var(--dusk-blue);
+        border-top: 5px double var(--dusk-blue);
+        padding: 20px 0;
+    }
+
+    .submit-btn {
+        font-size: 30px;
+        background-color: var(--space-indigo);
+        border: 3px outset var(--dusk-blue);
+        color: var(--aquamarine);
+        padding: 5px 30px;
+    }
+
+    .text-field-container {
+        width: 100%;
+    }
+
+    .text-field {
+        width: 100%;
+        height: 100px;
+        border: none;
+        background-color: var(--dusk-blue);
+        color: white;
+        text-align: center;
+        font-size: 20px;
+        padding: 10px 0;
+        resize: none;
+    }
+
+    .ascii-result-container {
+        width: 100%;
+        max-height: 320px;
+        overflow: auto;
+        display: inline-block;
+        font-family: monospace;
+        white-space: pre;
+        line-height: 1.17;
+        color: white;
+        text-align: left;
+        padding: 0 20px;
+    }
+
+
 </style>
 <body>
     <div class="background press-start-2p-regular">
@@ -230,7 +347,32 @@
     </div>
     <div id="container">
         <div class="main-card">
+            <div class="main-content">
+                <p class="main-text sixtyfour-reqular">TEXT TO ASCII ART</p>
+                .
+                <p class="subtext sixtyfour-reqular">↓ WRITE TEXT ↓</p>
+                <div class="text-field-container">
+                    <textarea class="text-field sixtyfour-reqular" placeholder="HELLO ASCII!"></textarea>
+                </div>
+                <div class="select-container sixtyfour-reqular">
+                    <button class="select-button sixtyfour-reqular"><</button>
+                    <p class="select-button-text">STANDART</p>
+                    <button class="select-button sixtyfour-reqular">></button>
+                </div>
+                <p class="subtext sixtyfour-reqular">↑ SELECT ASCII BANNER ↑</p>
+                <div class="submit-btn-container">
+                    <button class="submit-btn sixtyfour-reqular">GENERATE</button>
+                </div>
+                <div class="ascii-result-container">
+ _    _   ______   _        _         ____                      _____    _____   _____   _____         _  
+| |  | | |  ____| | |      | |       / __ \            /\      / ____|  / ____| |_   _| |_   _|       | | 
+| |__| | | |__    | |      | |      | |  | |          /  \    | (___   | |        | |     | |         | | 
+|  __  | |  __|   | |      | |      | |  | |         / /\ \    \___ \  | |        | |     | |         | | 
+| |  | | | |____  | |____  | |____  | |__| |        / ____ \   ____) | | |____   _| |_   _| |_        |_| 
+|_|  |_| |______| |______| |______|  \____/        /_/    \_\ |_____/   \_____| |_____| |_____|       (_)
 
+                </div>
+            </div>
         </div>
     </div>
 </body>
