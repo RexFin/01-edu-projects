@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -87,6 +89,30 @@ func printExample() {
 	os.Exit(1)
 }
 
+func parseRGB(input string) (uint8, uint8, uint8) {
+	re := regexp.MustCompile(`^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$`)
+
+	matches := re.FindStringSubmatch(strings.ToLower(input))
+
+	// If RGB input from user is incorrect
+	// just return white color
+	if matches == nil {
+		return 255, 255, 255
+	}
+
+	r, errR := strconv.ParseUint(matches[1], 10, 8)
+	g, errG := strconv.ParseUint(matches[2], 10, 8)
+	b, errB := strconv.ParseUint(matches[3], 10, 8)
+
+	// If RGB value not correct (out of range 0 to 255)
+	// just return white color
+	if errR != nil || errG != nil || errB != nil {
+		return 255, 255, 255
+	}
+
+	return uint8(r), uint8(g), uint8(b)
+}
+
 func main() {
 	args := os.Args[1:]
 	if len(args) < 1 || args[0] == "" || len(args) > 3 {
@@ -120,11 +146,16 @@ func main() {
 	}
 
 	// Setuping color from baseColor
-	colorName := string(strings.Split(color, "--color=")[1])
+	colorName := strings.ToLower(string(strings.Split(color, "--color=")[1]))
 	for k, v := range baseColors {
-		if k == strings.ToLower(colorName) {
+		if k == colorName {
 			colorRGB = v
 		}
+	}
+
+	// Setuping RGB (if user used it)
+	if strings.Contains(colorName, "rgb") {
+		colorRGB.red, colorRGB.green, colorRGB.blue = parseRGB(colorName)
 	}
 
 	// Finding range of filling text
@@ -132,15 +163,11 @@ func main() {
 		startFillIndex = strings.Index(input, fillText)
 		if startFillIndex != -1 {
 			endFillIndex = startFillIndex + (len(fillText) - 1)
+		} else {
+			// If text not found, just painting text to default
+			colorRGB.red, colorRGB.green, colorRGB.blue = 255, 255, 255
 		}
 	}
-
-	// Printing args for test
-	fmt.Println("COLOR: ", strings.ToLower(colorName))
-	fmt.Println("FILLED TEXT: ", fillText)
-	fmt.Println("INPUT: ", input)
-	fmt.Println("START ", startFillIndex)
-	fmt.Println("END ", endFillIndex)
 
 	content, err := os.ReadFile(banner)
 	if err != nil {
