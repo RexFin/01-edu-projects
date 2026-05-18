@@ -83,10 +83,11 @@ func draw(word string, alphabet []string, startFillIndex, endFillIndex int, Colo
 }
 
 func printExample() {
+	fmt.Println()
 	fmt.Println("Usage: go run . [OPTION] [STRING]")
 	fmt.Println()
 	fmt.Println("EX: go run . --color=<color> <substring to be colored> \"something\"")
-	os.Exit(1)
+	fmt.Println()
 }
 
 func parseRGB(input string) (uint8, uint8, uint8) {
@@ -117,6 +118,7 @@ func main() {
 	args := os.Args[1:]
 	if len(args) < 1 || args[0] == "" || len(args) > 3 {
 		printExample()
+		os.Exit(1)
 	}
 
 	input := ""
@@ -137,6 +139,7 @@ func main() {
 
 	if !strings.Contains(color, "--color=") {
 		printExample()
+		os.Exit(1)
 	}
 
 	isValid, err := checkIntegrity(banner)
