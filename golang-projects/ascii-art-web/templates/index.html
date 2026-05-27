@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII-ART-WEB</title>
+    <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+    <div class="background press-start-2p-regular">
+        <div class="background-element-container no-selectable">
+            <span class="anim-slow">!</span>
+            <span class="anim-fast">@</span>
+            <span class="anim-medium">#</span>
+            <span class="anim-slow">$</span>
+            <span class="anim-fast">%</span>
+            <span class="anim-slow">&</span>
+            <span class="anim-medium">*</span>
+            <span class="anim-fast">!</span>
+            <span class="anim-slow">@</span>
+            <span class="anim-fast">#</span>
+            <span class="anim-medium">A</span>
+            <span class="anim-medium">S</span>
+            <span class="anim-fast">C</span>
+            <span class="anim-slow">I</span>
+            <span class="anim-fast">I</span>
+            <span class="anim-slow">A</span>
+            <span class="anim-fast">R</span>
+            <span class="anim-slow">T</span>
+        </div>
+        <div class="background-stars-container">
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+        </div>
+    </div>
+    <div id="container">
+        <div class="main-card">
+            <div class="main-content">
+                <form id="ascii-art-form" style="display: contents;" action="/ascii-art" method="POST">
+                    <p class="main-text sixtyfour-reqular fade-in-element no-selectable">TEXT TO ASCII ART</p>
+                    <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↓ WRITE TEXT ↓</p>
+                    <div class="text-field-container fade-in-element">
+                        <textarea name="text" class="text-field sixtyfour-reqular" placeholder="HELLO ASCII!"></textarea>
+                    </div>
+                    <div class="select-container sixtyfour-reqular fade-in-element no-selectable">
+                        <button id="prevBtn" type="button" class="select-button sixtyfour-reqular"><</button>
+                        <input type="text"
+                            id="selectInput"
+                            name="banner-type"
+                            class="select-button-text sixtyfour-reqular"
+                            value="STANDART" 
+                            readonly>
+                        <button id="nextBtn" type="button" class="select-button sixtyfour-reqular">></button>
+                    </div>
+                    <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↑ SELECT ASCII BANNER ↑</p>
+                    <div class="submit-btn-container fade-in-element">
+                        <input type="submit" class="submit-btn sixtyfour-reqular" value="GENERATE">
+                    </div>
+                </form>
+<div class="ascii-result-container fade-in-element">
+ _    _   ______   _        _         ____                      _____    _____   _____   _____         _  
+| |  | | |  ____| | |      | |       / __ \            /\      / ____|  / ____| |_   _| |_   _|       | | 
+| |__| | | |__    | |      | |      | |  | |          /  \    | (___   | |        | |     | |         | | 
+|  __  | |  __|   | |      | |      | |  | |         / /\ \    \___ \  | |        | |     | |         | | 
+| |  | | | |____  | |____  | |____  | |__| |        / ____ \   ____) | | |____   _| |_   _| |_        |_| 
+|_|  |_| |______| |______| |______|  \____/        /_/    \_\ |_____/   \_____| |_____| |_____|       (_)
+
+
+ </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const options = ["STANDART", "SHADOW", "THINKERTOY"]; 
+
+        let currentIndex = 0;
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const selectInput = document.getElementById('selectInput');
+
+        function updateDisplay() {
+            selectInput.value = options[currentIndex];
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex++;
+            if (currentIndex >= options.length) {
+                currentIndex = 0;
+            }
+            updateDisplay();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = options.length - 1;
+            }
+            updateDisplay();
+        });
+
+        // Animation
+        document.addEventListener("DOMContentLoaded", () => {
+            const elements = document.querySelectorAll('.fade-in-element');
+            let index = 0;
+
+            setTimeout(() => {
+                const interval = setInterval(() => {
+                if (index < elements.length) {
+                    elements[index].classList.add('visible');
+                    index++;
+                } else {
+                    clearInterval(interval);
+                }
+                }, 300); 
+            }, 100); 
+        });
+    </script>
+</body>
+</html>
