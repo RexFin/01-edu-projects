@@ -14,7 +14,7 @@ type PageData struct {
 }
 
 func Render(w http.ResponseWriter, data *PageData) {
-	index, err := template.ParseFiles("templates/index-without-css.html")
+	index, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		http.Error(w, "500 Internal Server Error", 500)
 		log.Println(err)
