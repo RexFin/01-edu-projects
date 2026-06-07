@@ -14,5 +14,5 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	fmt.Println("Server started at http://localhost:8080")
-	http.ListenAndServe(":8080", nil) // Maybe create own router...?
+	http.ListenAndServe(":8080", nil)
 }
