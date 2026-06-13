@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./static/error_style.css">
+    <title>{{.ErrorText}}</title>
+</head>
+<body>
+    <div class="background">
+        <div id="background-grid"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="bsod container">
+        <h1 class="neg title"><span class="bg">Error - {{.ErrorCode}}</span></h1>
+        <p>{{.ErrorText}}, to continue:</p>
+        <p>* Return to our homepage.<br>
+            * Send the information to our team as you received this error.<br>
+            * Our contact: #nkishiba #assrakhimova #agabduli.
+        </p>
+        <nav class="nav">
+            <a href="/" class="link">GO TO HOME PAGE</a>
+        </nav>
+    </div>
+</body>
+<script>
+
+</script>
+</html>

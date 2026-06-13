@@ -1,0 +1,159 @@
+@import 'https://fonts.googleapis.com/css?family=VT323';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --prussian-blue: #0b132b;
+    --space-indigo: #1C2541;
+    --dusk-blue: #3A506B;
+    --tropical-teal: #5BC0BE;
+    --aquamarine: #6FFFE9;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    color: #e0e2f4;
+}
+
+p, a {
+    font: normal 20px/1.25rem 'VT323', monospace;
+}
+
+h1 {
+    font: normal 2.75rem/1.05em 'VT323', monospace;
+}
+
+.background {
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	background: linear-gradient(120deg, #1C2541 0%, #223040 50%, #080f21 100%);
+	background-size: 400% 400%;
+  	animation: gradient-anim 20s ease-in-out infinite;
+	overflow: hidden;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 0 200px rgba(0,0,0,0.5) inset;
+	z-index: -1;
+}
+
+#background-grid {
+	display: grid;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	grid-template: repeat(20, 1fr) / repeat(20, 1fr);
+	gap: 1px;
+	padding: 1px;
+	z-index: 1;
+
+	--grid-color: rgba(0, 119, 255, 0.1); 
+	--grid-thickness: 1px;
+	--grid-spacing: 30px;
+
+	background-color: transparent;
+	background-image:
+	repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent var(--grid-spacing),
+      var(--grid-color) var(--grid-spacing),
+      var(--grid-color) calc(var(--grid-spacing) + var(--grid-thickness))
+    ),
+
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent var(--grid-spacing),
+      var(--grid-color) var(--grid-spacing),
+      var(--grid-color) calc(var(--grid-spacing) + var(--grid-thickness))
+    );
+
+	animation: grid-anim 1s linear infinite;
+}
+
+.grid-item {
+	background-color: #ffffff;
+}
+
+.container {
+    width: 90%;
+    max-width: 640px;
+    background: #0414a77c;
+    border-radius: 10px;
+	box-shadow: 0 0 20px #0414a7, 0 0 40px #0414a7, 0 0 60px #0414a7;
+	animation: pulse-anim 10s linear infinite;
+	border: 2px solid #00084c50;
+}
+
+.bsod {
+	padding: 40px 20px;
+}
+
+.neg {
+	text-align: center;
+	color: #0414a7;
+}
+
+.bg {
+	background: #aaaaaa;
+	padding: 0 15px 2px 13px;
+}
+
+.title {
+	margin-bottom: 50px;
+}
+
+.nav {
+	margin-top: 35px;
+	text-align: center;
+}
+
+.link {
+	text-decoration: none;
+	padding: 0 9px 2px 8px;
+	color: #e0e2f4;
+}
+
+.link:hover, .link:focus {
+	background: #aaaaaa;
+	color: #0414a7;
+}
+
+@keyframes gradient-anim {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-anim {
+	0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 20px #0414a7, 0 0 40px #0414a7, 0 0 60px #0414a7;
+		transform: translateY(0);
+    }
+    20%, 24%, 55% {
+        opacity: 0.3;
+        box-shadow: 0 0 4px #0414a7;
+    }
+    22% {
+        opacity: 0.1;
+        box-shadow: none;
+    }
+}
+
+@keyframes grid-anim {
+	0% {
+		transform: scale(1.5) translateY(0);
+	}
+
+	100% {
+		transform: scale(1.5) translateY(30px);
+	}
+}
