@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./static/style.css">
 </head>
 <body>
+    <div id="loading-screen">
+        <span class="loader"></span>
+    </div>
     <div class="background press-start-2p-regular">
         <div class="background-element-container no-selectable">
             <span class="anim-slow">!</span>
@@ -86,6 +89,7 @@
                         <input type="submit" class="submit-btn sixtyfour-reqular" value="GENERATE">
                     </div>
                 </form>
+                <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↓ ↓ ↓ RESULT ↓ ↓ ↓</p>
 {{if .Result}}
 <div class="ascii-result-container fade-in-element custom-scroll">{{.Result}}</div>
 {{else}}
@@ -96,8 +100,59 @@
     </div>
 
     <script>
-        // Banner selection logic
+        function columnAnimation() {
+            const mainCard = document.querySelector(".main-card");
+            const elements = document.querySelectorAll('.fade-in-element');
+            
+            if (window.location.pathname === "/") {
+                if (mainCard) {
+                    mainCard.classList.add("main-card-opening");
+                }
+
+                let index = 0;
+
+                setTimeout(() => {
+                    const interval = setInterval(() => {
+                    if (index < elements.length) {
+                        elements[index].classList.add('visible');
+                        index++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                    }, 300); 
+                }, 100); 
+            } else {
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].classList.add('visible')
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Fonts loading screen
+            const loadingScreen = document.getElementById("loading-screen");
+            const mainContent = document.getElementById("container")
+
+            document.fonts.ready.then(() => {
+                hideLoader();
+                columnAnimation();
+            }).catch((error) => {
+                console.error("Ошибка при загрузке шрифтов:", error);
+                hideLoader();
+                columnAnimation();
+            });
+
+            function hideLoader() {
+                if (loadingScreen) {
+                    loadingScreen.classList.add("fade-out");
+                }
+
+                if (mainContent) {
+                    mainContent.classList.add("visible-content");
+                }
+            }
+
+            // Banner selection logic
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             const radioButtons = Array.from(document.querySelectorAll('input[name="banner"]'));
@@ -148,23 +203,6 @@
             } else {
                 updateClasses();
             }
-        });
-
-        // Animation
-        document.addEventListener("DOMContentLoaded", () => {
-            const elements = document.querySelectorAll('.fade-in-element');
-            let index = 0;
-
-            setTimeout(() => {
-                const interval = setInterval(() => {
-                if (index < elements.length) {
-                    elements[index].classList.add('visible');
-                    index++;
-                } else {
-                    clearInterval(interval);
-                }
-                }, 300); 
-            }, 100); 
         });
     </script>
 </body>

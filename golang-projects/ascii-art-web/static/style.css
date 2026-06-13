@@ -27,6 +27,10 @@
 
 body {
     background-color: var(--prussian-blue);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .press-start-2p-regular {
@@ -196,13 +200,59 @@ body {
 }
 /* [END] Animation for stars [END] */
 
-#container {
+#loading-screen {
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--prussian-blue);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    z-index: 9999;
+    color: var(--aquamarine);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* https://cssloaders.github.io/ */
+.loader {
+    width:45px;
+    height:40px;
+    background:
+    linear-gradient(#0000 calc(1*100%/6),#fff 0 calc(3*100%/6),#0000 0),
+    linear-gradient(#0000 calc(2*100%/6),#fff 0 calc(4*100%/6),#0000 0),
+    linear-gradient(#0000 calc(3*100%/6),#fff 0 calc(5*100%/6),#0000 0);
+    background-size:10px 400%;
+    background-repeat: no-repeat;
+    animation:matrix 1s infinite linear;
+}
+@keyframes matrix {
+    0% {background-position: 0% 100%, 50% 100%, 100% 100% }
+    100% {background-position: 0% 0%, 50% 0%, 100% 0% }
+}
+
+
+#container {
+    position: relative;
     inset: 0px;
-    width: 50rem;
-    height: 40rem;
+    width: 800px;
+    height: 690px;
     max-width: 100vw;
-    margin: auto;
+    margin: 20px auto;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#container.visible-content {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .main-card {
@@ -214,6 +264,12 @@ body {
     background-color: rgba(0, 0, 0, 0.4);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
     border-radius: 10px;
+    transition: all .5s ease-in;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.main-card-opening {
     animation: console-opening ease-in-out 1.5s;
 }
 
@@ -295,6 +351,7 @@ body {
     border-bottom: 5px dashed var(--dusk-blue);
     border-top: 5px dashed var(--dusk-blue);
     padding: 20px 0;
+    margin-bottom: 20px;
 }
 
 .submit-btn {
@@ -330,13 +387,16 @@ body {
     height: 150px;
     overflow: auto;
     display: inline-block;
+    background-color: rgba(0, 0, 0, 0.3);
     font-family: monospace;
     white-space: pre;
     line-height: 1.17;
     color: white;
     text-align: left;
-    padding: 0 20px;
-    filter: drop-shadow(0 0 10px white);
+    padding: 0 10px;
+    text-shadow: 0 0 10px white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     animation: pulse linear infinite;
 }
 
@@ -395,5 +455,129 @@ body {
 
     100% {
         height: 100%;
+    }
+}
+
+@media (max-width: 1440px) {
+    .background {
+        font-size: 80px;
+    }
+}
+
+@media (max-width: 1120px) {
+    .background {
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 900px) {
+    .background {
+        font-size: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .background-element-container span:nth-child(13) { top: 25%; left: 30%; transform: rotate(-80deg); }
+    .background-element-container span:nth-child(18) { top: 70%; left: 70%; transform: rotate(-80deg); }
+
+    #container {
+        height: 670px;
+        max-width: 90vw;
+    }
+
+    .main-text {
+        font-size: 25px;
+    }
+
+    .subtext, .select-button-text, .text-field {
+        font-size: 15px;
+    }
+
+    .select-button-text {
+        width: 150px;
+    }
+}
+
+@media (max-width: 575px) {
+    #container {
+        max-width: 95vw;
+    }
+}
+
+@media (max-width: 475px) {
+    .background-element-container span:nth-child(13) { top: 30%; left: 30%; transform: rotate(-80deg); }
+
+    .background {
+        font-size: 40px;
+    }
+
+    .main-content {
+        padding: 10px 0;
+    }
+
+    .main-text, .submit-btn-container {
+        border-bottom: 3px dashed var(--dusk-blue);
+        border-top: 3px dashed var(--dusk-blue);
+    }
+
+    #container {
+        max-width: 97vw;
+        height: 597px;
+    }
+
+    .main-text {
+        padding: 15px 0;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .subtext {
+        padding-bottom: 15px;
+    }
+
+    .select-button-text {
+        width: 80%;
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .select-container {
+        width: 100%;
+        padding: 0 10px 10px 10px;
+    }
+
+    .submit-btn-container {
+        padding: 15px 0;
+    }
+
+    .submit-btn {
+        width: 95%;
+    }
+
+    .subtext, .text-field {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 375px) {
+    #container {
+        max-width: 100vw;
+    }
+
+    .main-text {
+        font-size: 16px;
+    }
+
+    .subtext, .text-field {
+        font-size: 13px;
+    }
+
+    .select-button-text {
+        font-size: 17px;
+    }
+
+    .select-container {
+        padding: 0 0 10px 0;
+        margin: 10px 0;
     }
 }
