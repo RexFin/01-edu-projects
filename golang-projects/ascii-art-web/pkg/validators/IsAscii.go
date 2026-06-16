@@ -1,4 +1,4 @@
-package pkg
+package validators
 
 func IsAscii(s string) bool {
 	for i := 0; i < len(s); i++ {

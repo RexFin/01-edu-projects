@@ -1,17 +1,13 @@
-package handlers
+package handler
 
 import (
+	"ascii-art-web/internal/domain"
 	"html/template"
 	"log"
 	"net/http"
 )
 
-type ErrorData struct {
-	ErrorCode int
-	ErrorText string
-}
-
-func ErrorRender(w http.ResponseWriter, errorData *ErrorData) {
+func ErrorRender(w http.ResponseWriter, errorData *domain.ErrorData) {
 	index, err := template.ParseFiles("templates/error.html")
 	if err != nil {
 		http.Error(w, "500 Internal Server Error", 500)

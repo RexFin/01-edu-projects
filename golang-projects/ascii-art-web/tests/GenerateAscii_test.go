@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"ascii-art-web/pkg"
+	"ascii-art-web/internal/service"
 	"fmt"
 	"os"
 	"testing"
@@ -26,7 +26,7 @@ func TestGenerateAscii(t *testing.T) {
 	for _, tt := range tests {
 		testname := fmt.Sprintf("%s,%s", tt.text, tt.banner)
 		t.Run(testname, func(t *testing.T) {
-			ans, err := pkg.GenerateAscii(tt.text, tt.banner)
+			ans, err := service.GenerateAscii(tt.text, tt.banner)
 			if ans != tt.want {
 				fmt.Println("GenerateAscii error:", err)
 				t.Errorf("[%s] got \n%s, want \n%s", tt.name, ans, tt.want)

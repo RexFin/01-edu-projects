@@ -47,7 +47,8 @@
                     <p class="main-text sixtyfour-reqular fade-in-element no-selectable">TEXT TO ASCII ART</p>
                     <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↓ WRITE TEXT ↓</p>
                     <div class="text-field-container fade-in-element">
-                        <textarea name="text" class="text-field sixtyfour-reqular custom-scroll" placeholder="EXAMPLE: HELLO ASCII!">{{.Text}}</textarea>
+                        <textarea name="text" id="ascii-input" class="text-field sixtyfour-reqular custom-scroll" placeholder="EXAMPLE: HELLO ASCII!" required>{{.Text}}</textarea>
+                        <div id="text-field-counter" class="text-field-counter sixtyfour-reqular">0 / 10000</div>
                     </div>
                     <div class="select-container sixtyfour-reqular fade-in-element no-selectable">
                         <button id="prevBtn" type="button" class="select-button sixtyfour-reqular"><</button>
@@ -70,18 +71,6 @@
                             {{end}}
                         {{end}}
 
-                        <input type="radio"
-                            id="shadow"
-                            name="banner"
-                            value="shadow">
-                        <label class="select-button-text sixtyfour-reqular" for="shadow">shadow</label>
-
-                        <input type="radio"
-                            id="thinkertoy"
-                            name="banner"
-                            value="thinkertoy">
-                        <label class="select-button-text sixtyfour-reqular" for="thinkertoy">thinkertoy</label>
-
                         <button id="nextBtn" type="button" class="select-button sixtyfour-reqular">></button>
                     </div>
                     <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↑ SELECT ASCII BANNER ↑</p>
@@ -100,6 +89,33 @@
     </div>
 
     <script>
+        const textarea = document.getElementById('ascii-input');
+        const counter = document.getElementById("text-field-counter");
+        const MAX_CHARS = 10000;
+
+        updateCounter();
+
+        textarea.addEventListener('input', function() {
+            if (this.value.length > MAX_CHARS) {
+                this.value = this.value.substring(0, MAX_CHARS);
+            }
+            
+            updateCounter();
+        });
+
+        function updateCounter() {
+            const currentLength = textarea.value.length;
+            counter.textContent = `${currentLength} / ${MAX_CHARS}`;
+
+            if (currentLength === MAX_CHARS) {
+                counter.style.color = 'red';
+                counter.style.fontWeight = 'bold';
+            } else {
+                counter.style.color = '';
+                counter.style.fontWeight = 'normal';
+            }
+        }
+
         function columnAnimation() {
             const mainCard = document.querySelector(".main-card");
             const elements = document.querySelectorAll('.fade-in-element');
@@ -129,7 +145,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Fonts loading screen
             const loadingScreen = document.getElementById("loading-screen");
             const mainContent = document.getElementById("container")
 
