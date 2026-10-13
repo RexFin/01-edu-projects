@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII-ART-WEB</title>
+    <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <span class="loader"></span>
+    </div>
+    <div class="background press-start-2p-regular">
+        <div class="background-element-container no-selectable">
+            <span class="anim-slow">!</span>
+            <span class="anim-fast">@</span>
+            <span class="anim-medium">#</span>
+            <span class="anim-slow">$</span>
+            <span class="anim-fast">%</span>
+            <span class="anim-slow">&</span>
+            <span class="anim-medium">*</span>
+            <span class="anim-fast">!</span>
+            <span class="anim-slow">@</span>
+            <span class="anim-fast">#</span>
+            <span class="anim-medium">A</span>
+            <span class="anim-medium">S</span>
+            <span class="anim-fast">C</span>
+            <span class="anim-slow">I</span>
+            <span class="anim-fast">I</span>
+            <span class="anim-slow">A</span>
+            <span class="anim-fast">R</span>
+            <span class="anim-slow">T</span>
+        </div>
+        <div class="background-stars-container">
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+        </div>
+    </div>
+    <div id="container">
+        <div class="main-card">
+            <div class="main-content">
+                <form id="ascii-art-form" style="display: contents;" action="/ascii-art" method="POST">
+                    <p class="main-text sixtyfour-reqular fade-in-element no-selectable">TEXT TO ASCII ART</p>
+                    <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↓ WRITE TEXT ↓</p>
+                    <div class="text-field-container fade-in-element">
+                        <textarea name="text" id="ascii-input" class="text-field sixtyfour-reqular custom-scroll" placeholder="EXAMPLE: HELLO ASCII!" required>{{.Text}}</textarea>
+                        <div id="text-field-counter" class="text-field-counter sixtyfour-reqular">0 / 10000</div>
+                    </div>
+                    <div class="select-container sixtyfour-reqular fade-in-element no-selectable">
+                        <button id="prevBtn" type="button" class="select-button sixtyfour-reqular"><</button>
+                         {{$selected := .SelectedBanner}}
+
+                        {{range .Banners}}
+                            {{if eq . $selected}}
+                                <input type="radio"
+                                id="{{.}}"
+                                name="banner"
+                                value="{{.}}"
+                                checked>
+                                <label class="select-button-text sixtyfour-reqular" for="{{.}}">{{.}}</label>
+                            {{else}}
+                                <input type="radio"
+                                id="{{.}}"
+                                name="banner"
+                                value="{{.}}">
+                                <label class="select-button-text sixtyfour-reqular" for="{{.}}">{{.}}</label>
+                            {{end}}
+                        {{end}}
+
+                        <button id="nextBtn" type="button" class="select-button sixtyfour-reqular">></button>
+                    </div>
+                    <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↑ SELECT ASCII BANNER ↑</p>
+                    <div class="submit-btn-container fade-in-element">
+                        <input type="submit" class="submit-btn sixtyfour-reqular" value="GENERATE">
+                    </div>
+                </form>
+                <p class="subtext sixtyfour-reqular fade-in-element no-selectable">↓ ↓ ↓ RESULT ↓ ↓ ↓</p>
+{{if .Result}}
+<div class="ascii-result-container fade-in-element custom-scroll">{{.Result}}</div>
+{{else}}
+<div class="ascii-result-container fade-in-element"></div>
+{{end}}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const textarea = document.getElementById('ascii-input');
+        const counter = document.getElementById("text-field-counter");
+        const MAX_CHARS = 10000;
+
+        updateCounter();
+
+        textarea.addEventListener('input', function() {
+            if (this.value.length > MAX_CHARS) {
+                this.value = this.value.substring(0, MAX_CHARS);
+            }
+            
+            updateCounter();
+        });
+
+        function updateCounter() {
+            const currentLength = textarea.value.length;
+            counter.textContent = `${currentLength} / ${MAX_CHARS}`;
+
+            if (currentLength === MAX_CHARS) {
+                counter.style.color = 'red';
+                counter.style.fontWeight = 'bold';
+            } else {
+                counter.style.color = '';
+                counter.style.fontWeight = 'normal';
+            }
+        }
+
+        function columnAnimation() {
+            const mainCard = document.querySelector(".main-card");
+            const elements = document.querySelectorAll('.fade-in-element');
+            
+            if (window.location.pathname === "/") {
+                if (mainCard) {
+                    mainCard.classList.add("main-card-opening");
+                }
+
+                let index = 0;
+
+                setTimeout(() => {
+                    const interval = setInterval(() => {
+                    if (index < elements.length) {
+                        elements[index].classList.add('visible');
+                        index++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                    }, 300); 
+                }, 100); 
+            } else {
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].classList.add('visible')
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingScreen = document.getElementById("loading-screen");
+            const mainContent = document.getElementById("container")
+
+            document.fonts.ready.then(() => {
+                hideLoader();
+                columnAnimation();
+            }).catch((error) => {
+                console.error("Ошибка при загрузке шрифтов:", error);
+                hideLoader();
+                columnAnimation();
+            });
+
+            function hideLoader() {
+                if (loadingScreen) {
+                    loadingScreen.classList.add("fade-out");
+                }
+
+                if (mainContent) {
+                    mainContent.classList.add("visible-content");
+                }
+            }
+
+            // Banner selection logic
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const radioButtons = Array.from(document.querySelectorAll('input[name="banner"]'));
+            
+            const activeClass = 'active-radio'; 
+
+            function updateClasses() {
+                radioButtons.forEach(radio => {
+                    if (radio.checked) {
+                        radio.classList.add(activeClass);
+                    } else {
+                        radio.classList.remove(activeClass);
+                    }
+                });
+            }
+
+            function getSelectedIndex() {
+                return radioButtons.findIndex(radio => radio.checked);
+            }
+
+            function selectRadio(index) {
+                radioButtons[index].checked = true;
+                radioButtons[index].dispatchEvent(new Event('change'));
+            }
+
+            prevBtn.addEventListener('click', () => {
+                let currentIndex = getSelectedIndex();
+                let newIndex = (currentIndex === -1 || currentIndex === 0) 
+                    ? radioButtons.length - 1 
+                    : currentIndex - 1;
+                selectRadio(newIndex);
+            });
+
+            nextBtn.addEventListener('click', () => {
+                let currentIndex = getSelectedIndex();
+                let newIndex = (currentIndex === -1 || currentIndex === radioButtons.length - 1) 
+                    ? 0 
+                    : currentIndex + 1;
+                selectRadio(newIndex);
+            });
+
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', updateClasses);
+            });
+
+            if (getSelectedIndex() === -1 && radioButtons.length > 0) {
+                selectRadio(0);
+            } else {
+                updateClasses();
+            }
+        });
+    </script>
+</body>
+</html>
