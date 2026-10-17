@@ -13,34 +13,64 @@ type Report struct {
 	Stats            solver.Stats
 }
 
-func PrintReport(board solver.Board, report Report) {
+// Итоговые данные для теста
+type AnalysisData struct {
+	FileName          string
+	TetrominoesCount  int
+	GridSize          int
+	TotalCells        int
+	FilledCells       int
+	EmptyCells        int
+	Compactness       float64
+	TheoryMin         int
+	MatchesTheoryMin  bool
+	ExecutionTimeMs   int64
+	PlacementAttempts int
+	Backtracks        int
+}
+
+func CalculateAnalysis(board solver.Board, report Report) AnalysisData {
 	filled := FilledCells(report.TetrominoesCount)
-	empty := EmptyCells(board.Size, report.TetrominoesCount)
 	total := board.Size * board.Size
-	compactness := CompactnessPercent(float64(filled), float64(total))
 	theoryMin := TheoreticalMinimum(report.TetrominoesCount)
+
+	return AnalysisData{
+		FileName:          report.FileName,
+		TetrominoesCount:  report.TetrominoesCount,
+		GridSize:          board.Size,
+		TotalCells:        total,
+		FilledCells:       filled,
+		EmptyCells:        EmptyCells(board.Size, report.TetrominoesCount),
+		Compactness:       CompactnessPercent(float64(filled), float64(total)),
+		TheoryMin:         theoryMin,
+		MatchesTheoryMin:  board.Size == theoryMin,
+		ExecutionTimeMs:   report.ExecutionTime.Milliseconds(),
+		PlacementAttempts: report.Stats.PlacementAttempts,
+		Backtracks:        report.Stats.Backtracks,
+	}
+}
+
+// Печатает только вывод
+func PrintReport(data AnalysisData) {
+	matchStatus := "differ"
+	if data.MatchesTheoryMin {
+		matchStatus = "matches"
+	}
 
 	fmt.Println("\n=== Solution Analysis ===")
 	fmt.Println()
-
-	fmt.Printf("Input file: %s\n", report.FileName)
-	fmt.Printf("Tetrominoes: %d\n\n", report.TetrominoesCount)
+	fmt.Printf("Input file: %s\n", data.FileName)
+	fmt.Printf("Tetrominoes: %d\n\n", data.TetrominoesCount)
 
 	fmt.Println("Solution quality:")
-	fmt.Printf("  Grid size: %dx%d (%d cells)\n", board.Size, board.Size, total)
-	fmt.Printf("  Filled cells: %d\n", filled)
-	fmt.Printf("  Empty cells: %d\n", empty)
-	fmt.Printf("  Compactness: %.2f%%\n", compactness)
-
-	// Проверка на совподение теоритической минимума с текущим размером доски
-	if board.Size == theoryMin {
-		fmt.Printf("  Theoretical minimum: %dx%d (matches)\n", theoryMin, theoryMin)
-	} else {
-		fmt.Printf("  Theoretical minimum: %dx%d (differ)\n", theoryMin, theoryMin)
-	}
+	fmt.Printf("  Grid size: %dx%d (%d cells)\n", data.GridSize, data.GridSize, data.TotalCells)
+	fmt.Printf("  Filled cells: %d\n", data.FilledCells)
+	fmt.Printf("  Empty cells: %d\n", data.EmptyCells)
+	fmt.Printf("  Compactness: %.2f%%\n", data.Compactness)
+	fmt.Printf("  Theoretical minimum: %dx%d (%s)\n", data.TheoryMin, data.TheoryMin, matchStatus)
 
 	fmt.Println("\nPerformance:")
-	fmt.Printf("  Execution time: %vms\n", report.ExecutionTime.Milliseconds())
-	fmt.Printf("  Placement attempts: %d\n", report.Stats.PlacementAttempts)
-	fmt.Printf("  Backtracks: %d\n", report.Stats.Backtracks)
+	fmt.Printf("  Execution time: %dms\n", data.ExecutionTimeMs)
+	fmt.Printf("  Placement attempts: %d\n", data.PlacementAttempts)
+	fmt.Printf("  Backtracks: %d\n", data.Backtracks)
 }

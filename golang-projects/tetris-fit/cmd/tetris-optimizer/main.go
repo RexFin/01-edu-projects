@@ -42,12 +42,19 @@ func main() {
 	board.Print()
 
 	if len(os.Args) == 3 && os.Args[2] == "--analyze" {
-		analyzer.PrintReport(*board, analyzer.Report{
+		// Сначало собираем данные
+		baseReport := analyzer.Report{
 			FileName:         os.Args[1],
 			TetrominoesCount: len(shapeList),
 			ExecutionTime:    executionTime,
 			Stats:            stats,
-		})
+		}
+
+		// С собраных данных делаем вычисление
+		analysisData := analyzer.CalculateAnalysis(*board, baseReport)
+
+		// Печатаем
+		analyzer.PrintReport(analysisData)
 	}
 
 }

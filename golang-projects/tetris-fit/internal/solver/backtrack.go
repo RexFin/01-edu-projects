@@ -12,12 +12,14 @@ func SolveRecursive(index int, shapeList [][]tetromino.Shape, board *Board, stat
 
 	for y := 0; y < board.Size; y++ {
 		for x := 0; x < board.Size; x++ {
+
+			stats.PlacementAttempts++
+
 			if board.CanPlace(shapeList[index], x, y) {
-				board.Place(shapeList[index], x, y, 'A'+rune(index))
-				stats.PlacementAttempts++
+				board.Place(shapeList[index], x, y, 'A'+rune(index%26))
 
 				if onStep != nil {
-					msg := fmt.Sprintf("Step: place piece %c", 'A'+rune(index))
+					msg := fmt.Sprintf("Step: place piece %c", 'A'+rune(index%26))
 					onStep(board, stats, msg)
 				}
 
@@ -29,7 +31,7 @@ func SolveRecursive(index int, shapeList [][]tetromino.Shape, board *Board, stat
 				stats.Backtracks++
 
 				if onStep != nil {
-					msg := fmt.Sprintf("Backtrack: removed piece %c", 'A'+rune(index))
+					msg := fmt.Sprintf("Backtrack: removed piece %c", 'A'+rune(index%26))
 					onStep(board, stats, msg)
 				}
 			}
