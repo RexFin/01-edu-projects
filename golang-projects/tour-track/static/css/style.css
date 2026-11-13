@@ -1,0 +1,158 @@
+/* --- Сброс CSS --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+body, h1, h2, h3, h4, p,
+figure, blockquote, dl, dd {
+    margin: 0;
+}
+
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+}
+
+body {
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    border: 1px solid lime;
+}
+
+.viewport {
+    width: 100vw;
+    height: 100dvh;
+    overflow: auto;
+    position: relative;
+    cursor: grab;
+    user-select: none; 
+    -webkit-user-select: none;
+
+    /* Прячем системные скроллбары для красоты */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE */
+}
+.viewport::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.viewport.is-dragging {
+    cursor: grabbing;
+}
+
+.viewport.is-dragging .circle {
+    pointer-events: none;
+}
+
+.honeycomb-grid {
+    position: relative;
+    margin: auto;
+}
+
+.circle {
+    background: transparent;
+    border: none;
+    padding: 0;
+    outline: none;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s ease, z-index 0s; /* z-index мгновенный, чтобы круг сразу был сверху */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.circle:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+.circle:focus-visible {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.circle:active {
+    transform: scale(0.95);
+}
+
+.circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* --- Оверлей --- */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* --- Активная кнопка --- */
+.circle.is-expanded {
+  transform: scale(2) !important;
+  z-index: 100 !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  cursor: default;
+}
+
+.details-panel {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  font-family: sans-serif;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.overlay.is-active .details-panel {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.details-panel h2 { margin: 0 0 10px 0; font-size: 2rem; }
+.details-panel p { margin: 5px 0; line-height: 1.4; }
