@@ -114,43 +114,47 @@ function enableDragToScroll() {
     const DRAG_THRESHOLD = 5;    // px, на сколько нужно сдвинуть мышь для немедленной активации
 
     viewport.addEventListener('mousedown', (e) => {
-    isMouseDown = true;
-    isDragging = false;
-    preventClick = false;
 
-    startX = e.pageX - viewport.offsetLeft;
-    startY = e.pageY - viewport.offsetTop;
-    scrollLeft = viewport.scrollLeft;
-    scrollTop = viewport.scrollTop;
+        // Блокировка GrabToScroll при активация кнопки
+        if (overlay.classList.contains('is-active')) return;
 
-    // Если держим мышь DRAG_DELAY и не отпускаем, включаем драг
-    dragTimer = setTimeout(() => {
-        if (isMouseDown) {
-        isDragging = true;
-        viewport.classList.add('is-dragging');
-        }
-    }, DRAG_DELAY);
-    });
+        isMouseDown = true;
+        isDragging = false;
+        preventClick = false;
 
-    viewport.addEventListener('mouseleave', () => {
-    isMouseDown = false;
-    isDragging = false;
-    viewport.classList.remove('is-dragging');
-    clearTimeout(dragTimer);
-    });
+        startX = e.pageX - viewport.offsetLeft;
+        startY = e.pageY - viewport.offsetTop;
+        scrollLeft = viewport.scrollLeft;
+        scrollTop = viewport.scrollTop;
 
-    viewport.addEventListener('mouseup', () => {
-    isMouseDown = false;
-    clearTimeout(dragTimer);
+        // Если держим мышь DRAG_DELAY и не отпускаем, включаем драг
+        dragTimer = setTimeout(() => {
+            if (isMouseDown) {
+            isDragging = true;
+            viewport.classList.add('is-dragging');
+            }
+        }, DRAG_DELAY);
+        });
 
-    if (isDragging) {
-        preventClick = true;
+        viewport.addEventListener('mouseleave', () => {
+        isMouseDown = false;
         isDragging = false;
         viewport.classList.remove('is-dragging');
-        
-        // Снимаем блокировку клика через 50мс
-        setTimeout(() => { preventClick = false; }, 50);
-    }
+        clearTimeout(dragTimer);
+        });
+
+        viewport.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        clearTimeout(dragTimer);
+
+        if (isDragging) {
+            preventClick = true;
+            isDragging = false;
+            viewport.classList.remove('is-dragging');
+            
+            // Снимаем блокировку клика через 50мс
+            setTimeout(() => { preventClick = false; }, 50);
+        }
     });
 
     // Двигаем мышью
@@ -193,6 +197,7 @@ function enableDragToScroll() {
             currentExpanded.classList.remove('is-expanded');
         }
         overlay.classList.remove('is-active');
+        detailsPanel.classList.remove('is-active');
     });
 
     container.addEventListener('click', (e) => {
@@ -223,14 +228,26 @@ function enableDragToScroll() {
         const artist = mockArtistsData.find(a => a.id === artistId);
 
         if (artist) {
-        detailsPanel.innerHTML = `
-            <h2>${artist.name}</h2>
-            <p><strong>Год создания:</strong> ${artist.creationDate}</p>
-            <p><strong>Первый альбом:</strong> ${artist.firstAlbum}</p>
-            <p><strong>Участники:</strong> ${artist.members.join(', ')}</p>
-        `;
+            detailsPanel.innerHTML = `
+                <div class="info-side info-left">
+                <h2>${artist.name}</h2>
+                <p><strong>Год создания:</strong> ${artist.creationDate}</p>
+                <p><strong>Первый альбом:</strong> ${artist.firstAlbum}</p>
+                </div>
+
+                <div class="center-spacer"></div>
+
+                <div class="info-side info-right">
+                <p><strong>Участники:</strong></p>
+                <p>${artist.members.join(', ')}</p>
+                </div>
+            `;
         } else {
-            detailsPanel.innerHTML = `<h2>Данные загружаются...</h2><p>ID: ${artistId}</p>`;
+            detailsPanel.innerHTML = `
+                <div class="info-side info-left"><h2>Загрузка...</h2></div>
+                <div class="center-spacer"></div>
+                <div class="info-side info-right"><p>ID: ${artistId}</p></div>
+            `;
         }
 
         button.classList.add('is-expanded');
@@ -285,6 +302,16 @@ function customSmoothScroll(element, targetX, targetY, duration) {
 
     requestAnimationFrame(animation);
 }
+
+const detailsPanel = document.getElementById('details-panel');
+
+// Не даем кликам и выделению текста внутри карточек закрывать overlay
+detailsPanel.addEventListener('click', (e) => {
+  // Если клик или выделение текста было внутри .info-side не закрываем окно
+    if (e.target.closest('.info-side')) {
+        e.stopPropagation();
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     arrangeRadialHoneycomb();
