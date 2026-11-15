@@ -37,7 +37,6 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    border: 1px solid lime;
 }
 
 .viewport {
@@ -53,6 +52,7 @@ body {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE */
 }
+
 .viewport::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
 }
@@ -73,6 +73,16 @@ body {
     pointer-events: none;
     z-index: 0;
     background-color: #e3e0f3;
+    overflow: hidden;
+}
+
+.floating-note {
+    position: absolute;
+    bottom: -60px;
+    color: var(--note-color, rgba(255, 255, 255, 0.25));
+    user-select: none;
+    will-change: transform, opacity;
+    animation: floatNoteUp var(--duration, 15s) linear var(--delay, 0s) infinite;
 }
 
 .honeycomb-grid {
@@ -84,32 +94,45 @@ body {
     background: transparent;
     border: none;
     padding: 0;
-    outline: none;
+    
+    outline-style: solid;
+    outline-width: 1px;
+    outline-offset: 0;
+    outline-color: rgba(0, 130, 206, 0);
+
     width: var(--circle-size);
     height: var(--circle-size);
     border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     cursor: pointer;
-    transition: transform 0.2s ease, z-index 0s; /* z-index мгновенный, чтобы круг сразу был сверху */
+    transition: transform 0.3s ease, z-index 0.2s; /* z-index мгновенный, чтобы круг сразу был сверху */
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1;
+    opacity: 0;
 }
 
 .circle:hover {
-    transform: scale(1.05);
-    z-index: 10;
+    transform: scale(1.2);
+    box-shadow: 0 0 0 4px var(--hover-glow, rgba(255, 217, 122, 0.9)), 0 8px 20px rgba(0, 0, 0, 0.5);
+    z-index: 11;
 }
+
 .circle:focus-visible {
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
-    transform: scale(1.05);
-    z-index: 10;
+    box-shadow: 0 0 0 4px var(--hover-glow, rgba(255, 217, 122, 0.9)), 0 8px 20px rgba(0, 0, 0, 0.5);
+    transform: scale(1.2);
+    z-index: 11;
 }
 
 .circle:active {
-    transform: scale(0.95);
+    transform: scale(0.6);
+}
+
+.circle.is-visible {
+    opacity: 1;
+    animation: circleFadeIn .5s ease-out normal;
 }
 
 .circle img {
@@ -117,6 +140,19 @@ body {
     height: 100%;
     object-fit: cover;
     pointer-events: none;
+    transition: all 60s ease-out;
+}
+
+.circle.is-expanded img {
+    transition: all 3s ease-in;
+}
+
+.circle:hover:not(.circle.is-expanded) img {
+    transform: rotate(1440deg);
+}
+
+.circle:not(:hover) img {
+    transition: all 2s ease-in-out;
 }
 
 /* --- Оверлей --- */
@@ -131,7 +167,7 @@ body {
     z-index: 50;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, display 0.3s allow-discrete;
 }
 
 .overlay.is-active {
@@ -145,7 +181,7 @@ body {
 .circle.is-expanded {
     transform: scale(var(--expand-scale)) !important;
     z-index: 100 !important;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 4px  rgb(255, 255, 255), 0 8px 20px rgba(255, 255, 255, 0.5);
     cursor: default;
 }
 
@@ -156,11 +192,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 32px;
     padding: 0 40px;
     opacity: 0;
     pointer-events: none; /* Пропускает клики мимо текста в .overlay для закрытия */
-    transition: opacity 0.3s ease;
+    transition: opacity 0.1s ease;
 }
 
 .overlay.is-active .details-panel {
@@ -173,32 +208,140 @@ body {
 
 .center-spacer {
     width: calc(var(--circle-size) * var(--expand-scale));
-    height: calc(var(--circle-size) * var(--expand-scale));
-    flex-shrink: 0;
+    height: 160px;
+    background: white;
     border-radius: 50%;
+    flex-shrink: 0;
     pointer-events: none;
 }
 
 .info-side {
+    --overlap: 45px;
+    --inner-gap: 24px;
+
     flex: 1;
-    max-width: 400px;
-    color: #fff;
+    max-width: 420px;
+    height: 160px;
+    color: black;
     font-family: sans-serif;
-    background: rgba(0, 0, 0, 0.4);
+    background: white;
     padding: 20px;
     border-radius: 12px;
     pointer-events: auto;
     user-select: text;          /* Разрешаем выделение текста */
     -webkit-user-select: text;  /* Для Safari и Chrome */
     cursor: auto; 
+    overflow: hidden;
+
+    /* opacity: 0;
+    max-width: 0px;
+    color: white; */
 }
 
 .info-left {
     text-align: right;
+    margin-right: calc(var(--overlap) * -1);
+    padding-right: calc(var(--overlap) + var(--inner-gap));
+    padding-left: 36px;
+    border-radius: 9999px 0 0 9999px;
 }
 
 .info-right {
     text-align: left;
+    margin-left: calc(var(--overlap) * -1);
+    padding-left: calc(var(--overlap) + var(--inner-gap));
+    padding-right: 36px;
+    border-radius: 0 9999px 9999px 0;
+}
+
+.overlay.is-active .info-side {
+    animation: infoSideOpen 1s ease-out 0.3s both;
+}
+
+.overlay.is-active .center-spacer {
+    animation: centerSpacerOpen 0.2s ease-out 0.3s both;
+}
+
+@keyframes circleFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+
+    40% {
+        opacity: .7;
+        transform: scale(1.8) rotate(270deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+@keyframes animateOutline {
+    0% {
+        outline-width: 1px;
+        outline-offset: 0;
+        outline-color: rgba(0, 130, 206, 0);
+    }
+    10% {
+        outline-color: rgba(0, 130, 206, 0.75);
+    }
+    50% {
+        outline-width: 7px;
+        outline-offset: 4px;
+        outline-color: rgba(0, 130, 206, 0);
+    }
+    100% {
+        outline-width: 7px;
+        outline-offset: 4px;
+        outline-color: rgba(0, 130, 206, 0);
+    }
+}
+
+@keyframes floatNoteUp {
+    0% {
+        transform: translate3d(0, 0, 0) rotate(var(--rot-start, -15deg));
+        opacity: 0;
+    }
+    15% {
+        opacity: var(--max-opacity, 1);
+    }
+    85% {
+        opacity: var(--max-opacity, 1);
+    }
+    100% {
+        transform: translate3d(var(--drift-x, 40px), var(--travel-y, -2200px), 0) rotate(var(--rot-end, 25deg));
+        opacity: 0;
+    }
+}
+
+@keyframes infoSideOpen {
+    0% {
+        opacity: 0;
+        color: white;
+        max-width: 0px;
+    }
+    15% {
+        opacity: 1;
+    }
+    80% {
+        color: white;
+    }
+    100% {
+        opacity: 1;
+        color: black;
+        max-width: 420px;
+    }
+}
+
+@keyframes centerSpacerOpen {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* Чтобы анимация появления из display: none срабатывала плавно */
@@ -206,5 +349,17 @@ body {
     .overlay.is-active,
     .details-panel.is-active {
         opacity: 0;
+    }
+}
+
+@starting-style {
+    .overlay.is-active .center-spacer {
+        opacity: 0;
+    }
+
+    .overlay.is-active .info-side {
+        opacity: 0;
+        max-width: 0px;
+        color: white;
     }
 }

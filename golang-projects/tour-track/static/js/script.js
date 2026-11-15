@@ -21,7 +21,7 @@ function arrangeRadialHoneycomb() {
     const gapY = 10;       
 
     // --- настройка пустого пространство ---
-    const paddingX = 2000;
+    const paddingX = 1000;
     const paddingY = 500;
 
     const dx = size + gapX;
@@ -110,7 +110,7 @@ function enableDragToScroll() {
     let dragTimer;
 
     // --- настройка курсора ---
-    const DRAG_DELAY = 150;      // мс, сколько нужно удерживать для активации скролла
+    const DRAG_DELAY = 300;      // мс, сколько нужно удерживать для активации скролла
     const DRAG_THRESHOLD = 5;    // px, на сколько нужно сдвинуть мышь для немедленной активации
 
     viewport.addEventListener('mousedown', (e) => {
@@ -130,32 +130,32 @@ function enableDragToScroll() {
         // Если держим мышь DRAG_DELAY и не отпускаем, включаем драг
         dragTimer = setTimeout(() => {
             if (isMouseDown) {
-            isDragging = true;
-            viewport.classList.add('is-dragging');
-            }
-        }, DRAG_DELAY);
+                isDragging = true;
+                viewport.classList.add('is-dragging');
+                }
+            }, DRAG_DELAY);
         });
 
         viewport.addEventListener('mouseleave', () => {
-        isMouseDown = false;
-        isDragging = false;
-        viewport.classList.remove('is-dragging');
-        clearTimeout(dragTimer);
+            isMouseDown = false;
+            isDragging = false;
+            viewport.classList.remove('is-dragging');
+            clearTimeout(dragTimer);
         });
 
         viewport.addEventListener('mouseup', () => {
-        isMouseDown = false;
-        clearTimeout(dragTimer);
+            isMouseDown = false;
+            clearTimeout(dragTimer);
 
-        if (isDragging) {
-            preventClick = true;
-            isDragging = false;
-            viewport.classList.remove('is-dragging');
-            
-            // Снимаем блокировку клика через 50мс
-            setTimeout(() => { preventClick = false; }, 50);
-        }
-    });
+            if (isDragging) {
+                preventClick = true;
+                isDragging = false;
+                viewport.classList.remove('is-dragging');
+                
+                // Снимаем блокировку клика через 50мс
+                setTimeout(() => { preventClick = false; }, 50);
+            }
+        });
 
     // Двигаем мышью
     viewport.addEventListener('mousemove', (e) => {
@@ -181,9 +181,11 @@ function enableDragToScroll() {
         viewport.scrollTop = scrollTop - walkY;
     });
 
-    const images = viewport.querySelectorAll('img');
-    images.forEach(img => {
-        img.addEventListener('dragstart', (e) => e.preventDefault());
+    // Не даем перетаскивать картинки
+    viewport.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+        }
     });
 
     // Вызов плавной передвижения и оверлей
@@ -259,7 +261,24 @@ function enableDragToScroll() {
         const targetScrollLeft = buttonCenterX - (viewport.clientWidth / 2);
         const targetScrollTop = buttonCenterY - (viewport.clientHeight / 2);
 
-        customSmoothScroll(viewport, targetScrollLeft, targetScrollTop, 800);
+        customSmoothScroll(viewport, targetScrollLeft, targetScrollTop, 400);
+    });
+
+    // Рандомный цвета при наведение курсором
+    let lastHue = -1;
+
+    container.addEventListener('mouseover', (e) => {
+        const button = e.target.closest('.circle');
+
+        if (!button || button.contains(e.relatedTarget)) return;
+
+        let hue;
+        do {
+            hue = Math.floor(Math.random() * 360);
+        } while (Math.abs(hue - lastHue) < 50);
+        lastHue = hue;
+
+        button.style.setProperty('--hover-glow', `hsla(${hue}, 95%, 68%, 0.9)`);
     });
 }
 
@@ -303,6 +322,63 @@ function customSmoothScroll(element, targetX, targetY, duration) {
     requestAnimationFrame(animation);
 }
 
+function animateCirclesSequentially() {
+    const circles = document.querySelectorAll('#hex-grid .circle');
+    const STAGGER_DELAY = 70;
+
+    circles.forEach((circle, index) => {
+        setTimeout(() => {
+            circle.classList.add('is-visible');
+        }, index * STAGGER_DELAY);
+    });
+}
+
+function initFloatingNotes() {
+    const bgContainer = document.querySelector('.background');
+    if (!bgContainer) return;
+
+    // Берем размер высоты заднего фона
+    const containerHeight = bgContainer.offsetHeight || window.innerHeight;
+    bgContainer.style.setProperty('--travel-y', `-${containerHeight + 120}px`);
+
+    // Настройка заднего фона
+    const symbols = ['♪', '♫', '♩', '♬', '♭', '♯'];
+    const NOTE_COUNT = 100;
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < NOTE_COUNT; i++) {
+        const note = document.createElement('span');
+        note.classList.add('floating-note');
+        note.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+        const startX = (Math.random() * 96 + 2).toFixed(1);
+        const duration = (Math.random() * 18 + 20).toFixed(1);
+        const delay = -(Math.random() * duration).toFixed(1);
+        const driftX = Math.floor(Math.random() * 180 - 90);
+        const rotStart = Math.floor(Math.random() * 40 - 20);
+        const rotEnd = rotStart + Math.floor(Math.random() * 60 - 30);
+        const size = Math.floor(Math.random() * 22 + 25);
+        
+        const maxOpacity = (Math.random() * 0.5 + 0.15).toFixed(2);
+        const hue = Math.floor(Math.random() * 360);
+
+        note.style.left = `${startX}%`;
+        note.style.fontSize = `${size}px`;
+        note.style.setProperty('--note-color', `hsl(${hue}, 90%, 70%)`);
+        note.style.setProperty('--duration', `${duration}s`);
+        note.style.setProperty('--delay', `${delay}s`);
+        note.style.setProperty('--drift-x', `${driftX}px`);
+        note.style.setProperty('--rot-start', `${rotStart}deg`);
+        note.style.setProperty('--rot-end', `${rotEnd}deg`);
+        note.style.setProperty('--max-opacity', maxOpacity);
+
+        fragment.appendChild(note);
+    }
+
+    bgContainer.appendChild(fragment);
+}
+
 const detailsPanel = document.getElementById('details-panel');
 
 // Не даем кликам и выделению текста внутри карточек закрывать overlay
@@ -316,4 +392,6 @@ detailsPanel.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     arrangeRadialHoneycomb();
     enableDragToScroll();
+    animateCirclesSequentially();
+    initFloatingNotes();
 });
