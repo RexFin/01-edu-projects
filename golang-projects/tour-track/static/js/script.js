@@ -232,16 +232,18 @@ function enableDragToScroll() {
         if (artist) {
             detailsPanel.innerHTML = `
                 <div class="info-side info-left">
-                <h2>${artist.name}</h2>
-                <p><strong>Год создания:</strong> ${artist.creationDate}</p>
-                <p><strong>Первый альбом:</strong> ${artist.firstAlbum}</p>
+                <h2 class="days-one-regular">${artist.name}</h2>
+                <p class="neucha-regular"><strong>Год создания:</strong> ${artist.creationDate}</p>
+                <p class="neucha-regular"><strong>Первый альбом:</strong> ${artist.firstAlbum}</p>
                 </div>
 
-                <div class="center-spacer"></div>
+                <div class="center-spacer">
+                    <a href="/artist/${artist.id}" class="action-btn days-one-regular">Подробнее</a>
+                </div>
 
                 <div class="info-side info-right">
-                <p><strong>Участники:</strong></p>
-                <p>${artist.members.join(', ')}</p>
+                <p class="neucha-regular"><strong>Участники:</strong></p>
+                <p class="neucha-regular">${artist.members.join(', ')}</p>
                 </div>
             `;
         } else {

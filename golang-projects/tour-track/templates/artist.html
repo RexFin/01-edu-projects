@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queen — Tour Track</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Days+One&family=Neucha&display=swap');
+
+        .days-one-regular {
+            font-family: "Days One", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .neucha-regular {
+            font-family: "Neucha", cursive;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* --- Сброс CSS --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body, h1, h2, h3, p, ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        body {
+            min-height: 100vh;
+            line-height: 1.5;
+            color: #1e293b;
+            background: radial-gradient(circle at 50% 45%, #f0f7ff 0%, #f8f0f6 45%, #e9eef5 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            min-height: 100dvh;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: 1fr minmax(auto, 40%) 1fr;
+            gap: 35px;
+            align-items: center;
+            width: 100%;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+        }
+
+        .card-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 18px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .band-title {
+            font-size: 2.3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #0284c7, #e11d48, #0284c7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-flow 5s linear infinite;
+            overflow-wrap: break-word;
+        }
+
+        .card-image {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 240px;
+            height: 240px;
+            padding: 6px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(225, 29, 72, 0.18), 0 12px 30px rgba(2, 132, 199, 0.18);
+            animation: float-slow 5s ease-in-out infinite;
+        }
+
+        .card-image::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: linear-gradient(90deg, #0ea5e9 0%, #f43f5e 100%);
+            animation: rotate 4s linear infinite;
+            z-index: 0;
+        }
+
+        .card-image-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            padding: 6px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-main-info ul {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-main-info li {
+            padding: 6px 18px;
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 999px;
+            font-size: 0.95rem;
+            color: #334155;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card-main-info li:first-child {
+            color: #0284c7;
+            background: #f0f9ff;
+            border-color: rgba(2, 132, 199, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .card-main-info li:hover {
+            transform: scale(1.05);
+            border-color: #f43f5e;
+            box-shadow: 0 6px 16px rgba(244, 63, 94, 0.15);
+        }
+
+        .card-side {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .card-section {
+            padding: 18px 22px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(15, 23, 42, 0.07);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            animation: float-card 6s ease-in-out infinite;
+        }
+
+        .card-side--left .card-section:nth-child(1) { animation-delay: 0s; }
+        .card-side--left .card-section:nth-child(2) { animation-delay: 1.5s; }
+        .card-side--right .card-section:nth-child(1) { animation-delay: 0.8s; }
+        .card-side--right .card-section:nth-child(2) { animation-delay: 2.2s; }
+
+        .card-section:hover {
+            border-color: rgba(2, 132, 199, 0.35);
+            box-shadow: 0 12px 30px rgba(2, 132, 199, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #e11d48;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-section ul {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            max-height: 190px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0 8px;
+        }
+
+        .card-section li {
+            position: relative;
+            padding: 4px 10px;
+            border-radius: 8px;
+            color: #334155;
+            cursor: default;
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                        color 0.25s ease,
+                        background-color 0.25s ease;
+        }
+
+        .card-side--left .card-section {
+            text-align: right;
+        }
+        .card-side--left .card-section li:hover {
+            transform: translateX(6px);
+            color: #0284c7;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.12));
+        }
+
+        .card-side--right .card-section {
+            text-align: left;
+        }
+        .card-side--right .card-section li:hover {
+            transform: translateX(-6px);
+            color: #e11d48;
+            background: linear-gradient(270deg, transparent, rgba(244, 63, 94, 0.12));
+        }
+
+        .card-section ul::-webkit-scrollbar {
+            width: 4px;
+        }
+        .card-section ul::-webkit-scrollbar-thumb {
+            background: rgba(15, 23, 42, 0.15);
+            border-radius: 4px;
+        }
+
+        .action-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 28px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #1e293b;
+            cursor: pointer;
+            border-radius: 999px;
+            margin-top: 10px;
+
+            border: 2px solid transparent;
+            background: 
+                linear-gradient(#ffffff, #ffffff) padding-box,
+                linear-gradient(90deg, #0ea5e9, #f43f5e) border-box;
+
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.25s ease,
+                        color 0.25s ease;
+        }
+
+        .action-btn::before {
+            content: "←";
+            font-family: sans-serif;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #0284c7;
+            transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            color: #e11d48;
+            box-shadow: 
+                0 10px 25px rgba(244, 63, 94, 0.2),
+                0 10px 25px rgba(14, 165, 233, 0.2);
+        }
+
+        .action-btn:hover::before {
+            transform: translateX(-5px);
+            color: #e11d48;
+        }
+
+        .action-btn:active {
+            transform: translateY(1px) scale(0.97);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+
+        /* --- Контейнер анимированного фона --- */
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: #ffffff;
+            pointer-events: none;
+        }
+
+        /* Мягкая белая дымка снизу и слева */
+        .background .h {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 0;
+            box-shadow: 0 0 35vh 22vh #ffffff;
+        }
+        
+        .background .v {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 100vh;
+            box-shadow: 0 0 12vw 6vw #ffffff;
+        }
+
+        .rainbow {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 100vh;
+            transform: rotate(10deg);
+            transform-origin: top right;
+        }
+
+        .rainbow:nth-child(6n + 1) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(232 121 249), 0 0 50px 25px rgb(96 165 250), 50px 0 50px 25px rgb(94 234 212), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 2) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(232 121 249), 0 0 50px 25px rgb(94 234 212), 50px 0 50px 25px rgb(96 165 250), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 3) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(94 234 212), 0 0 50px 25px rgb(232 121 249), 50px 0 50px 25px rgb(96 165 250), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 4) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(94 234 212), 0 0 50px 25px rgb(96 165 250), 50px 0 50px 25px rgb(232 121 249), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 5) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(96 165 250), 0 0 50px 25px rgb(94 234 212), 50px 0 50px 25px rgb(232 121 249), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 6) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(96 165 250), 0 0 50px 25px rgb(232 121 249), 50px 0 50px 25px rgb(94 234 212), 130px 0 80px 40px #ffffff;
+        }
+
+        .rainbow:nth-child(1)  { animation: rainbow-slide 88.2s linear -3.6s infinite; }
+        .rainbow:nth-child(2)  { animation: rainbow-slide 86.4s linear -7.2s infinite; }
+        .rainbow:nth-child(3)  { animation: rainbow-slide 84.6s linear -10.8s infinite; }
+        .rainbow:nth-child(4)  { animation: rainbow-slide 82.8s linear -14.4s infinite; }
+        .rainbow:nth-child(5)  { animation: rainbow-slide 81s linear -18s infinite; }
+        .rainbow:nth-child(6)  { animation: rainbow-slide 79.2s linear -21.6s infinite; }
+        .rainbow:nth-child(7)  { animation: rainbow-slide 77.4s linear -25.2s infinite; }
+        .rainbow:nth-child(8)  { animation: rainbow-slide 75.6s linear -28.8s infinite; }
+        .rainbow:nth-child(9)  { animation: rainbow-slide 73.8s linear -32.4s infinite; }
+        .rainbow:nth-child(10) { animation: rainbow-slide 72s linear -36s infinite; }
+        .rainbow:nth-child(11) { animation: rainbow-slide 70.2s linear -39.6s infinite; }
+        .rainbow:nth-child(12) { animation: rainbow-slide 68.4s linear -43.2s infinite; }
+        .rainbow:nth-child(13) { animation: rainbow-slide 66.6s linear -46.8s infinite; }
+        .rainbow:nth-child(14) { animation: rainbow-slide 64.8s linear -50.4s infinite; }
+        .rainbow:nth-child(15) { animation: rainbow-slide 63s linear -54s infinite; }
+        .rainbow:nth-child(16) { animation: rainbow-slide 61.2s linear -57.6s infinite; }
+        .rainbow:nth-child(17) { animation: rainbow-slide 59.4s linear -61.2s infinite; }
+        .rainbow:nth-child(18) { animation: rainbow-slide 57.6s linear -64.8s infinite; }
+        .rainbow:nth-child(19) { animation: rainbow-slide 55.8s linear -68.4s infinite; }
+        .rainbow:nth-child(20) { animation: rainbow-slide 54s linear -72s infinite; }
+        .rainbow:nth-child(21) { animation: rainbow-slide 52.2s linear -75.6s infinite; }
+        .rainbow:nth-child(22) { animation: rainbow-slide 50.4s linear -79.2s infinite; }
+        .rainbow:nth-child(23) { animation: rainbow-slide 48.6s linear -82.8s infinite; }
+        .rainbow:nth-child(24) { animation: rainbow-slide 46.8s linear -86.4s infinite; }
+        .rainbow:nth-child(25) { animation: rainbow-slide 45s linear -90s infinite; }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes float-card {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes rainbow-slide {
+            from { right: -25vw; }
+            to   { right: 145vw; }
+        }
+
+        @media (max-width: 850px) {
+            .card-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            .card-center {
+                order: -1;
+            }
+            .card-side--left .card-section,
+            .card-side--right .card-section {
+                text-align: left;
+            }
+            .card-side--left .card-section li:hover {
+                transform: translateX(6px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background" aria-hidden="true">
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="h"></div>
+        <div class="v"></div>
+    </div>
+
+    <main> 
+        <div class="container">
+            <div class="card-container">
+                
+                <!-- ЛЕВАЯ КОЛОНКА -->
+                <div class="card-side card-side--left">
+                    <div class="card-section neucha-regular">
+                        <p class="section-title">Участники группы:</p>
+                        <ul>
+                            <li>Freddie Mercury</li>
+                            <li>Brian May</li>
+                            <li>John Deacon</li>
+                            <li>Roger Meddows-Taylor</li>
+                            <li>Mike Grose</li>
+                            <li>Barry Mitchell</li>
+                            <li>Doug Fogie</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-section neucha-regular">
+                        <p class="section-title">Локации:</p>
+                        <ul>
+                            <li>north_carolina-usa</li>
+                            <li>georgia-usa</li>
+                            <li>los_angeles-usa</li>
+                            <li>saitama-japan</li>
+                            <li>osaka-japan</li>
+                            <li>nagoya-japan</li>
+                            <li>penrose-new_zealand</li>
+                            <li>dunedin-new_zealand</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА -->
+                <div class="card-center">
+                    <h1 class="band-title days-one-regular">Queen</h1>
+
+                    <div class="card-image">
+                        <div class="card-image-inner">
+                            <img src="https://groupietrackers.01edu.ai/api/images/queen.jpeg" alt="Queen">
+                        </div>
+                    </div>
+
+                    <div class="card-main-info">
+                        <ul>
+                            <li class="days-one-regular">Статус: Established</li>
+                            <li class="neucha-regular">Год создания: 1970</li>
+                            <li class="neucha-regular">Первый альбом: 14-12-1973</li>
+                        </ul>
+
+                        <button type="button" class="action-btn days-one-regular" onclick="console.log('нажал')">
+                            Назад
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ПРАВАЯ КОЛОНКА -->
+                <div class="card-side card-side--right">
+                    <div class="card-section neucha-regular">
+                        <p class="section-title">Даты концертов:</p>
+                        <ul>
+                            <li>23-08-2019</li>
+                            <li>22-08-2019</li>
+                            <li>20-08-2019</li>
+                            <li>26-01-2020</li>
+                            <li>28-01-2020</li>
+                            <li>30-01-2019</li>
+                            <li>07-02-2020</li>
+                            <li>07-02-2020</li>
+                            <li>07-02-2020</li>
+                            <li>07-02-2020</li>
+                            <li>07-02-2020</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-section neucha-regular">
+                        <p class="section-title">Концерты по городам:</p>
+                        <ul>
+                            <li>dunedin-new_zealand: 10-02-2020</li>
+                            <li>georgia-usa: 22-08-2019</li>
+                            <li>los_angeles-usa: 20-08-2019</li>
+                            <li>nagoya-japan: 30-01-2019</li>
+                            <li>north_carolina-usa: 23-08-2019</li>
+                            <li>osaka-japan: 28-01-2020</li>
+                            <li>penrose-new_zealand: 07-02-2020</li>
+                            <li>saitama-japan: 26-01-2020</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>
