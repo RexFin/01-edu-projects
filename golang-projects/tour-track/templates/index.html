@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/style.css">
-    <title>Artist list</title>
+    <title>✧ Artists list ✧</title>
 </head>
 <body>
-    <header>
-        <nav>
-    
-        </nav>
-    </header>
+    <svg width="0" height="0" style="position: absolute;" aria-hidden="true">
+        <defs>
+            <path id="bottom-arc" d="M 4,50 A 46,46 0 0,0 96,50" />
+        </defs>
+    </svg>
+
     <main>
         <div class="container">
             <div class="viewport" id="viewport">
@@ -19,70 +20,53 @@
                     <div class="details-panel" id="details-panel"></div>
                 </div>
 
+                {{with .Notice}}
+                <p class="notice" role="status">{{.}}</p>
+                {{end}}
+
                 <div class="honeycomb-grid" id="hex-grid">
-                    <div class="background">
+                    <div class="background"></div>
+
+                    {{range .Artists}}
+                    <button
+                        type="button"
+                        class="circle"
+                        data-id="{{.Artist.ID}}"
+                        data-name="{{.Artist.Name}}"
+                        data-creation="{{.Artist.CreationDate}}"
+                        data-album="{{.Artist.FirstAlbum}}"
+                        data-members="{{range $i, $member := .Artist.Members}}{{if $i}}, {{end}}{{$member}}{{end}}"
+                        data-activity="{{.Activity}}">
+
+                        {{if .Artist.Image}}
+                            <img src="{{.Artist.Image}}"
+                                alt="{{.Artist.Name}}"
+                                loading="lazy"
+                                onerror="this.hidden=true; this.nextElementSibling.hidden=false;">
+                        {{end}}
                         
-                    </div>
+                        <svg style="background-color: white;" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -2159.000000)" fill="#000000">
+                                    <g id="icons" transform="translate(56.000000, 160.000000)">
+                                        <path d="M100.562548,2016.99998 L87.4381713,2016.99998 C86.7317804,2016.99998 86.2101535,2016.30298 86.4765813,2015.66198 C87.7127655,2012.69798 90.6169306,2010.99998 93.9998492,2010.99998 C97.3837885,2010.99998 100.287954,2012.69798 101.524138,2015.66198 C101.790566,2016.30298 101.268939,2016.99998 100.562548,2016.99998 M89.9166645,2004.99998 C89.9166645,2002.79398 91.7489936,2000.99998 93.9998492,2000.99998 C96.2517256,2000.99998 98.0830339,2002.79398 98.0830339,2004.99998 C98.0830339,2007.20598 96.2517256,2008.99998 93.9998492,2008.99998 C91.7489936,2008.99998 89.9166645,2007.20598 89.9166645,2004.99998 M103.955674,2016.63598 C103.213556,2013.27698 100.892265,2010.79798 97.837022,2009.67298 C99.4560048,2008.39598 100.400241,2006.33098 100.053171,2004.06998 C99.6509769,2001.44698 97.4235996,1999.34798 94.7348224,1999.04198 C91.0232075,1998.61898 87.8750721,2001.44898 87.8750721,2004.99998 C87.8750721,2006.88998 88.7692896,2008.57398 90.1636971,2009.67298 C87.1074334,2010.79798 84.7871636,2013.27698 84.044024,2016.63598 C83.7745338,2017.85698 84.7789973,2018.99998 86.0539717,2018.99998 L101.945727,2018.99998 C103.221722,2018.99998 104.226185,2017.85698 103.955674,2016.63598" id="profile_round-[#1342]"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
 
-                    <div class="honeycomb-grid" id="hex-grid">
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/queen.jpeg" alt="Queen"></button>
-                        <button class="circle" data-id="2"><img src="https://groupietrackers.01edu.ai/api/images/soja.jpeg" alt="SOJA"></button>
-                        <button class="circle" data-id="3"><img src="https://groupietrackers.01edu.ai/api/images/pinkfloyd.jpeg" alt="Pink Floyd"></button>
-                        <button class="circle" data-id="4"><img src="https://groupietrackers.01edu.ai/api/images/scorpions.jpeg" alt="Scorpions"></button>
-                        <button class="circle" data-id="5"><img src="https://groupietrackers.01edu.ai/api/images/xxxtentacion.jpeg" alt="XXXTentacion"></button>
-                        <button class="circle" data-id="6"><img src="https://groupietrackers.01edu.ai/api/images/macmiller.jpeg" alt="Mac Miller"></button>
-                        <button class="circle" data-id="7"><img src="https://groupietrackers.01edu.ai/api/images/joynerlucas.jpeg" alt="Joyner Lucas"></button>
-                        <button class="circle" data-id="8"><img src="https://groupietrackers.01edu.ai/api/images/kencricklamar.jpeg" alt="Kendrick Lamar"></button>
-                        <button class="circle" data-id="9"><img src="https://groupietrackers.01edu.ai/api/images/acdc.jpeg" alt="ACDC"></button>
-                        <button class="circle" data-id="10"><img src="https://groupietrackers.01edu.ai/api/images/pearljam.jpeg" alt="Pearl Jam"></button>
-                        <button class="circle" data-id="11"><img src="https://groupietrackers.01edu.ai/api/images/katyperry.jpeg" alt="Katy Perry"></button>
-                        <button class="circle" data-id="12"><img src="https://groupietrackers.01edu.ai/api/images/rihanna.jpeg" alt="Rihanna"></button>
-                        <button class="circle" data-id="13"><img src="https://groupietrackers.01edu.ai/api/images/genesis.jpeg" alt="Genesis"></button>
-                        <button class="circle" data-id="14"><img src="https://groupietrackers.01edu.ai/api/images/philcollins.jpeg" alt="Phil Collins"></button>
-                        <button class="circle" data-id="15"><img src="https://groupietrackers.01edu.ai/api/images/ledzeppelin.jpeg" alt="Led Zeppelin"></button>
-                        <button class="circle" data-id="16"><img src="https://groupietrackers.01edu.ai/api/images/jimihendrix.jpeg" alt="The Jimi Hendrix Experience"></button>
-                        <button class="circle" data-id="17"><img src="https://groupietrackers.01edu.ai/api/images/beegees.jpeg" alt="Bee Gees"></button>
-                        <button class="circle" data-id="18"><img src="https://groupietrackers.01edu.ai/api/images/deeppurple.jpeg" alt="Deep Purple"></button>
-                        <button class="circle" data-id="19"><img src="https://groupietrackers.01edu.ai/api/images/aerosmith.jpeg" alt="Aerosmith"></button>
-                        <button class="circle" data-id="20"><img src="https://groupietrackers.01edu.ai/api/images/direstraits.jpeg" alt="Dire Straits"></button>
-                        <button class="circle" data-id="21"><img src="https://groupietrackers.01edu.ai/api/images/mamonasassassinas.jpeg" alt="Mamonas Assassinas"></button>
-                        <button class="circle" data-id="22"><img src="https://groupietrackers.01edu.ai/api/images/30.jpeg" alt="Thirty Seconds to Mars"></button>
-                        <button class="circle" data-id="23"><img src="https://groupietrackers.01edu.ai/api/images/imagineDragons.jpeg" alt="Imagine Dragons"></button>
-                        <button class="circle" data-id="24"><img src="https://groupietrackers.01edu.ai/api/images/juiceWrld.jpeg" alt="Juice Wrld"></button>
-                        <button class="circle" data-id="25"><img src="https://groupietrackers.01edu.ai/api/images/logic.jpeg" alt="Logic"></button>
-                        <button class="circle" data-id="26"><img src="https://groupietrackers.01edu.ai/api/images/alecBeenjamin.jpeg" alt="Alec Benjamin"></button>
-                        <button class="circle" data-id="27"><img src="https://groupietrackers.01edu.ai/api/images/bobbyMcFerrin.jpeg" alt="Bobby McFerrins"></button>
-                        <button class="circle" data-id="28"><img src="https://groupietrackers.01edu.ai/api/images/R3HAB.jpeg" alt="R3HAB"></button>
-                        <button class="circle" data-id="29"><img src="https://groupietrackers.01edu.ai/api/images/postmalone.jpeg" alt="Post Malone"></button>
-                        <button class="circle" data-id="30"><img src="https://groupietrackers.01edu.ai/api/images/travisScott.jpeg" alt="Travis Scott"></button>
-                        <button class="circle" data-id="31"><img src="https://groupietrackers.01edu.ai/api/images/jCole.jpeg" alt="J. Cole"></button>
-                        <button class="circle" data-id="32"><img src="https://groupietrackers.01edu.ai/api/images/nickelback.jpeg" alt="Nickelback"></button>
-                        <button class="circle" data-id="33"><img src="https://groupietrackers.01edu.ai/api/images/mobbDeep.jpeg" alt="Mobb Deep"></button>
-                        <button class="circle" data-id="34"><img src="https://groupietrackers.01edu.ai/api/images/gunsNRoses.jpeg" alt="Guns N' Roses"></button>
-                        <button class="circle" data-id="35"><img src="https://groupietrackers.01edu.ai/api/images/nwa.jpeg" alt="NWA"></button>
-                        <button class="circle" data-id="36"><img src="https://groupietrackers.01edu.ai/api/images/u2.jpeg" alt="U2"></button>
-                        <button class="circle" data-id="37"><img src="https://groupietrackers.01edu.ai/api/images/arcticmonkeys.jpeg" alt="Arctic Monkeys"></button>
-
-                        <!-- Нужно будет сделать так, чтобы backend давал мне пагинацию с размером 37 элементов (ну или 19 элементов, если много не надо) -->
-
-                        <!-- <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/fallOutBoy.jpeg" alt="Fall Out Boy"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/gorillaz.jpeg" alt="Gorillaz"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/eagles.jpeg" alt="Eagles"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/linkinpark.jpeg" alt="Linkin Park"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/redhotchilipeppers.jpeg" alt="Red Hot Chili Peppers"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/eminem.jpeg" alt="Eminem"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/greenday.jpeg" alt="Green Day"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/metallica.jpeg" alt="Metallica"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/coldplay.jpeg" alt="Coldplay"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/maroon5.jpeg" alt="Maroon 5"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/twentyonepilots.jpeg" alt="Twenty One Pilots"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/therollingstones.jpeg" alt="The Rolling Stones"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/muse.jpeg" alt="Muse"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/foofighters.jpeg" alt="Foo Fighters"></button>
-                        <button class="circle" data-id="1"><img src="https://groupietrackers.01edu.ai/api/images/thechainsmokers.jpeg" alt="The Chainsmokers"></button> -->
-                    </div>
+                        <svg class="arc-badge badge-{{.Activity}}" viewBox="0 0 100 100" aria-hidden="true">
+                            <text>
+                                <textPath href="#bottom-arc" startOffset="50%" text-anchor="middle">
+                                    {{.Activity}}
+                                </textPath>
+                            </text>
+                        </svg>
+                    </button>
+                    {{else}}
+                    <p>Артисты не найдены.</p>
+                    {{end}}
                 </div>
-
             </div>
         </div>
     </main>

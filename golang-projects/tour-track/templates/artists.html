@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Queen — Tour Track</title>
+    <title>{{.Artist.Artist.Name}} ✧ Tour Track</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Days+One&family=Neucha&display=swap');
@@ -30,6 +30,10 @@
         body, h1, h2, h3, p, ul {
             margin: 0;
             padding: 0;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
         }
 
         ul {
@@ -254,6 +258,7 @@
             padding: 12px 28px;
             font-size: 1rem;
             letter-spacing: 1px;
+            text-decoration: none;
             text-transform: uppercase;
             color: #1e293b;
             cursor: pointer;
@@ -298,6 +303,22 @@
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
         }
 
+        .rising-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 16px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #ffffff;
+            background: linear-gradient(90deg, #0ea5e9, #f43f5e, #0ea5e9);
+            background-size: 200% auto;
+            border-radius: 999px;
+            box-shadow: 0 6px 18px rgba(244, 63, 94, 0.28);
+            animation: gradient-flow 4s linear infinite, badge-pulse 2.8s ease-in-out infinite;
+        }
+
         /* --- Контейнер анимированного фона --- */
         .background {
             position: fixed;
@@ -306,6 +327,7 @@
             overflow: hidden;
             background: #ffffff;
             pointer-events: none;
+            opacity: .5;
         }
 
         /* Мягкая белая дымка снизу и слева */
@@ -406,6 +428,17 @@
             to   { right: 145vw; }
         }
 
+        @keyframes badge-pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 6px 18px rgba(244, 63, 94, 0.28);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 24px rgba(14, 165, 233, 0.38);
+            }
+        }
+
         @media (max-width: 850px) {
             .card-container {
                 grid-template-columns: 1fr;
@@ -420,6 +453,63 @@
             }
             .card-side--left .card-section li:hover {
                 transform: translateX(6px);
+            }
+        }
+
+        /* --- Адаптивная оптимизация количества лучей под ширину экрана --- */
+        @media (max-width: 1024px) {
+            .rainbow:nth-child(n + 15) {
+                display: none;
+                animation: none;
+            }
+
+            .rainbow:nth-child(1) { animation-delay: -6s; }
+            .rainbow:nth-child(2) { animation-delay: -12s; }
+            .rainbow:nth-child(3) { animation-delay: -18s; }
+            .rainbow:nth-child(4) { animation-delay: -24s; }
+            .rainbow:nth-child(5) { animation-delay: -30s; }
+            .rainbow:nth-child(6) { animation-delay: -36s; }
+            .rainbow:nth-child(7) { animation-delay: -42s; }
+            .rainbow:nth-child(8) { animation-delay: -48s; }
+            .rainbow:nth-child(9) { animation-delay: -54s; }
+            .rainbow:nth-child(10) { animation-delay: -60s; }
+            .rainbow:nth-child(11) { animation-delay: -66s; }
+            .rainbow:nth-child(12) { animation-delay: -72s; }
+            .rainbow:nth-child(13) { animation-delay: -78s; }
+            .rainbow:nth-child(14) { animation-delay: -84s; }
+        }
+
+        @media (max-width: 640px) {
+            .rainbow:nth-child(n + 8) {
+                display: none;
+                animation: none;
+            }
+
+            .rainbow:nth-child(1) { animation-delay: -12s; }
+            .rainbow:nth-child(2) { animation-delay: -24s; }
+            .rainbow:nth-child(3) { animation-delay: -36s; }
+            .rainbow:nth-child(4) { animation-delay: -48s; }
+            .rainbow:nth-child(5) { animation-delay: -60s; }
+            .rainbow:nth-child(6) { animation-delay: -72s; }
+            .rainbow:nth-child(7) { animation-delay: -84s; }
+
+            .rainbow:nth-child(6n + 1) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(232 121 249), 0 0 30px 15px rgb(96 165 250), 25px 0 30px 15px rgb(94 234 212), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 2) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(232 121 249), 0 0 30px 15px rgb(94 234 212), 25px 0 30px 15px rgb(96 165 250), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 3) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(94 234 212), 0 0 30px 15px rgb(232 121 249), 25px 0 30px 15px rgb(96 165 250), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 4) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(94 234 212), 0 0 30px 15px rgb(96 165 250), 25px 0 30px 15px rgb(232 121 249), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 5) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(96 165 250), 0 0 30px 15px rgb(94 234 212), 25px 0 30px 15px rgb(232 121 249), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 6) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(96 165 250), 0 0 30px 15px rgb(232 121 249), 25px 0 30px 15px rgb(94 234 212), 70px 0 45px 20px #ffffff;
             }
         }
     </style>
@@ -464,51 +554,50 @@
                     <div class="card-section neucha-regular">
                         <p class="section-title">Участники группы:</p>
                         <ul>
-                            <li>Freddie Mercury</li>
-                            <li>Brian May</li>
-                            <li>John Deacon</li>
-                            <li>Roger Meddows-Taylor</li>
-                            <li>Mike Grose</li>
-                            <li>Barry Mitchell</li>
-                            <li>Doug Fogie</li>
+                            {{range .Artist.Artist.Members}}
+                            <li>{{.}}</li>
+                            {{else}}
+                            <li>Нет данных</li>
+                            {{end}}
                         </ul>
                     </div>
 
                     <div class="card-section neucha-regular">
                         <p class="section-title">Локации:</p>
-                        <ul>
-                            <li>north_carolina-usa</li>
-                            <li>georgia-usa</li>
-                            <li>los_angeles-usa</li>
-                            <li>saitama-japan</li>
-                            <li>osaka-japan</li>
-                            <li>nagoya-japan</li>
-                            <li>penrose-new_zealand</li>
-                            <li>dunedin-new_zealand</li>
+                        <ul class="js-locations">
+                            {{range .Artist.Relation.Locations}}
+                            <li>{{.}}</li>
+                            {{else}}
+                            <li>Нет данных</li>
+                            {{end}}
                         </ul>
                     </div>
                 </div>
 
                 <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА -->
                 <div class="card-center">
-                    <h1 class="band-title days-one-regular">Queen</h1>
+                    <h1 class="band-title days-one-regular">{{.Artist.Artist.Name}}</h1>
+
+                    {{if .Artist.Rising}}
+                    <span class="rising-badge days-one-regular">★ Rising Star</span>
+                    {{end}}
 
                     <div class="card-image">
                         <div class="card-image-inner">
-                            <img src="https://groupietrackers.01edu.ai/api/images/queen.jpeg" alt="Queen">
+                            <img src="{{.Artist.Artist.Image}}" alt="{{.Artist.Artist.Name}}">
                         </div>
                     </div>
 
                     <div class="card-main-info">
                         <ul>
-                            <li class="days-one-regular">Статус: Established</li>
-                            <li class="neucha-regular">Год создания: 1970</li>
-                            <li class="neucha-regular">Первый альбом: 14-12-1973</li>
+                            <li class="days-one-regular">Статус: {{.Artist.Activity}}</li>
+                            <li class="neucha-regular">Год создания: {{.Artist.Artist.CreationDate}}</li>
+                            <li class="neucha-regular">Первый альбом: {{.Artist.Artist.FirstAlbum}}</li>
                         </ul>
 
-                        <button type="button" class="action-btn days-one-regular" onclick="console.log('нажал')">
+                        <a href="/" class="action-btn days-one-regular">
                             Назад
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -516,32 +605,23 @@
                 <div class="card-side card-side--right">
                     <div class="card-section neucha-regular">
                         <p class="section-title">Даты концертов:</p>
-                        <ul>
-                            <li>23-08-2019</li>
-                            <li>22-08-2019</li>
-                            <li>20-08-2019</li>
-                            <li>26-01-2020</li>
-                            <li>28-01-2020</li>
-                            <li>30-01-2019</li>
-                            <li>07-02-2020</li>
-                            <li>07-02-2020</li>
-                            <li>07-02-2020</li>
-                            <li>07-02-2020</li>
-                            <li>07-02-2020</li>
+                        <ul class="js-dates">
+                            {{range .Artist.Relation.Dates}}
+                            <li>{{.}}</li>
+                            {{else}}
+                            <li>Нет данных</li>
+                            {{end}}
                         </ul>
                     </div>
 
                     <div class="card-section neucha-regular">
                         <p class="section-title">Концерты по городам:</p>
-                        <ul>
-                            <li>dunedin-new_zealand: 10-02-2020</li>
-                            <li>georgia-usa: 22-08-2019</li>
-                            <li>los_angeles-usa: 20-08-2019</li>
-                            <li>nagoya-japan: 30-01-2019</li>
-                            <li>north_carolina-usa: 23-08-2019</li>
-                            <li>osaka-japan: 28-01-2020</li>
-                            <li>penrose-new_zealand: 07-02-2020</li>
-                            <li>saitama-japan: 26-01-2020</li>
+                        <ul class="js-dates-locations">
+                            {{range $location, $dates := .Artist.Relation.DatesLocations}}
+                            <li>{{$location}}: {{range $i, $date := $dates}}{{if $i}}, {{end}}{{$date}}{{end}}</li>
+                            {{else}}
+                            <li>Нет данных</li>
+                            {{end}}
                         </ul>
                     </div>
                 </div>
@@ -549,5 +629,65 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function toTitleCase(str) {
+                return str
+                    .trim()
+                    .split('_')
+                    .filter(Boolean)
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                    .join(' ');
+            }
+
+            function formatLocation(raw) {
+                if (!raw.includes('-')) return toTitleCase(raw);
+
+                const [cityPart, countryPart] = raw.split('-');
+                const city = toTitleCase(cityPart);
+                const cleanCountryRaw = countryPart.trim();
+
+                const country = (!cleanCountryRaw.includes('_') && cleanCountryRaw.length <= 3)
+                    ? cleanCountryRaw.toUpperCase()
+                    : toTitleCase(cleanCountryRaw);
+
+                return `${city} | ${country}`;
+            }
+
+            function formatDate(raw) {
+                return raw.replace(/\*/g, '').trim();
+            }
+
+            document.querySelectorAll('.js-locations li').forEach(li => {
+                const text = li.textContent.trim();
+                if (text === 'Нет данных') return;
+                li.textContent = formatLocation(text);
+            });
+
+            document.querySelectorAll('.js-dates li').forEach(li => {
+                const text = li.textContent.trim();
+                if (text === 'Нет данных') return;
+                li.textContent = formatDate(text);
+            });
+
+            document.querySelectorAll('.js-dates-locations li').forEach(li => {
+                const text = li.textContent.trim();
+                if (text === 'Нет данных' || !text.includes(':')) return;
+
+                const colonIndex = text.indexOf(':');
+                const rawLoc = text.slice(0, colonIndex);
+                const rawDates = text.slice(colonIndex + 1);
+
+                const cleanLoc = formatLocation(rawLoc);
+                const cleanDates = rawDates
+                    .split(',')
+                    .map(d => formatDate(d))
+                    .join(', ');
+
+                li.textContent = `${cleanLoc}: ${cleanDates}`;
+            });
+        });
+    </script>
 </body>
 </html>

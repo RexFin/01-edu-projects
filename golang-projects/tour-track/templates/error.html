@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Ошибка {{.Status}} ✧ Tour Track</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Neucha&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/site.css">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            min-height: 100vh;
+            line-height: 1.5;
+            color: #1e293b;
+            font-family: 'Neucha', sans-serif;
+            overflow-x: hidden;
+        }
+        
+
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: #ffffff;
+            pointer-events: none;
+        }
+
+        .rainbow {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 100vh;
+            transform: rotate(10deg);
+            transform-origin: top right;
+        }
+
+        .rainbow:nth-child(6n + 1) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(232 121 249), 0 0 50px 25px rgb(96 165 250), 50px 0 50px 25px rgb(94 234 212), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 2) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(232 121 249), 0 0 50px 25px rgb(94 234 212), 50px 0 50px 25px rgb(96 165 250), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 3) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(94 234 212), 0 0 50px 25px rgb(232 121 249), 50px 0 50px 25px rgb(96 165 250), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 4) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(94 234 212), 0 0 50px 25px rgb(96 165 250), 50px 0 50px 25px rgb(232 121 249), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 5) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(96 165 250), 0 0 50px 25px rgb(94 234 212), 50px 0 50px 25px rgb(232 121 249), 130px 0 80px 40px #ffffff;
+        }
+        .rainbow:nth-child(6n + 6) {
+            box-shadow: -130px 0 80px 40px #ffffff, -50px 0 50px 25px rgb(96 165 250), 0 0 50px 25px rgb(232 121 249), 50px 0 50px 25px rgb(94 234 212), 130px 0 80px 40px #ffffff;
+        }
+
+        .rainbow:nth-child(1)  { animation: rainbow-slide 88.2s linear -3.6s infinite; }
+        .rainbow:nth-child(2)  { animation: rainbow-slide 86.4s linear -7.2s infinite; }
+        .rainbow:nth-child(3)  { animation: rainbow-slide 84.6s linear -10.8s infinite; }
+        .rainbow:nth-child(4)  { animation: rainbow-slide 82.8s linear -14.4s infinite; }
+        .rainbow:nth-child(5)  { animation: rainbow-slide 81s linear -18s infinite; }
+        .rainbow:nth-child(6)  { animation: rainbow-slide 79.2s linear -21.6s infinite; }
+        .rainbow:nth-child(7)  { animation: rainbow-slide 77.4s linear -25.2s infinite; }
+        .rainbow:nth-child(8)  { animation: rainbow-slide 75.6s linear -28.8s infinite; }
+        .rainbow:nth-child(9)  { animation: rainbow-slide 73.8s linear -32.4s infinite; }
+        .rainbow:nth-child(10) { animation: rainbow-slide 72s linear -36s infinite; }
+        .rainbow:nth-child(11) { animation: rainbow-slide 70.2s linear -39.6s infinite; }
+        .rainbow:nth-child(12) { animation: rainbow-slide 68.4s linear -43.2s infinite; }
+        .rainbow:nth-child(13) { animation: rainbow-slide 66.6s linear -46.8s infinite; }
+        .rainbow:nth-child(14) { animation: rainbow-slide 64.8s linear -50.4s infinite; }
+        .rainbow:nth-child(15) { animation: rainbow-slide 63s linear -54s infinite; }
+        .rainbow:nth-child(16) { animation: rainbow-slide 61.2s linear -57.6s infinite; }
+        .rainbow:nth-child(17) { animation: rainbow-slide 59.4s linear -61.2s infinite; }
+        .rainbow:nth-child(18) { animation: rainbow-slide 57.6s linear -64.8s infinite; }
+        .rainbow:nth-child(19) { animation: rainbow-slide 55.8s linear -68.4s infinite; }
+        .rainbow:nth-child(20) { animation: rainbow-slide 54s linear -72s infinite; }
+        .rainbow:nth-child(21) { animation: rainbow-slide 52.2s linear -75.6s infinite; }
+        .rainbow:nth-child(22) { animation: rainbow-slide 50.4s linear -79.2s infinite; }
+        .rainbow:nth-child(23) { animation: rainbow-slide 48.6s linear -82.8s infinite; }
+        .rainbow:nth-child(24) { animation: rainbow-slide 46.8s linear -86.4s infinite; }
+        .rainbow:nth-child(25) { animation: rainbow-slide 45s linear -90s infinite; }
+
+        .background .h {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 0;
+            box-shadow: 0 0 35vh 22vh #ffffff;
+        }
+
+        .background .v {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 100vh;
+            box-shadow: 0 0 12vw 6vw #ffffff;
+        }
+
+        .error-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh;
+            padding: 24px;
+        }
+
+        .error-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 520px;
+            padding: 48px 36px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+            animation: float-slow 5s ease-in-out infinite;
+        }
+
+        .error-box h1 {
+            font-family: 'Days One', sans-serif;
+            font-size: clamp(4.2rem, 12vw, 6.5rem);
+            line-height: 1;
+            letter-spacing: 4px;
+            background: linear-gradient(90deg, #0284c7, #e11d48, #0284c7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-flow 5s linear infinite;
+            filter: drop-shadow(0 8px 18px rgba(2, 132, 199, 0.15));
+        }
+
+        .error-box p {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.2rem;
+            color: #334155;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(15, 23, 42, 0.07);
+            border-radius: 16px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+        }
+
+        /* --- Кнопка возврата --- */
+        .back {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 6px;
+            padding: 13px 28px;
+            font-family: 'Days One', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #1e293b;
+            border-radius: 999px;
+            border: 2px solid transparent;
+            background:
+                linear-gradient(#ffffff, #ffffff) padding-box,
+                linear-gradient(90deg, #0ea5e9, #f43f5e) border-box;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.25s ease,
+                        color 0.25s ease;
+        }
+
+        .back::before {
+            content: "←";
+            font-family: sans-serif;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #0284c7;
+            transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        .back:hover {
+            transform: translateY(-2px);
+            color: #e11d48;
+            box-shadow:
+                0 10px 25px rgba(244, 63, 94, 0.2),
+                0 10px 25px rgba(14, 165, 233, 0.2);
+        }
+
+        .back:hover::before {
+            transform: translateX(-5px);
+            color: #e11d48;
+        }
+
+        .back:active {
+            transform: translateY(1px) scale(0.97);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+
+        @keyframes rainbow-slide {
+            from { right: -25vw; }
+            to   { right: 145vw; }
+        }
+
+        @keyframes gradient-flow {
+            0%   { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px); }
+            50%      { transform: translateY(-7px); }
+        }
+
+        /* --- Адаптивная оптимизация количества лучей под ширину экрана --- */
+        @media (max-width: 1024px) {
+            .rainbow:nth-child(n + 15) {
+                display: none;
+                animation: none;
+            }
+
+            .rainbow:nth-child(1) { animation-delay: -6s; }
+            .rainbow:nth-child(2) { animation-delay: -12s; }
+            .rainbow:nth-child(3) { animation-delay: -18s; }
+            .rainbow:nth-child(4) { animation-delay: -24s; }
+            .rainbow:nth-child(5) { animation-delay: -30s; }
+            .rainbow:nth-child(6) { animation-delay: -36s; }
+            .rainbow:nth-child(7) { animation-delay: -42s; }
+            .rainbow:nth-child(8) { animation-delay: -48s; }
+            .rainbow:nth-child(9) { animation-delay: -54s; }
+            .rainbow:nth-child(10) { animation-delay: -60s; }
+            .rainbow:nth-child(11) { animation-delay: -66s; }
+            .rainbow:nth-child(12) { animation-delay: -72s; }
+            .rainbow:nth-child(13) { animation-delay: -78s; }
+            .rainbow:nth-child(14) { animation-delay: -84s; }
+        }
+
+        @media (max-width: 640px) {
+            .rainbow:nth-child(n + 8) {
+                display: none;
+                animation: none;
+            }
+
+            .rainbow:nth-child(1) { animation-delay: -12s; }
+            .rainbow:nth-child(2) { animation-delay: -24s; }
+            .rainbow:nth-child(3) { animation-delay: -36s; }
+            .rainbow:nth-child(4) { animation-delay: -48s; }
+            .rainbow:nth-child(5) { animation-delay: -60s; }
+            .rainbow:nth-child(6) { animation-delay: -72s; }
+            .rainbow:nth-child(7) { animation-delay: -84s; }
+
+            .rainbow:nth-child(6n + 1) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(232 121 249), 0 0 30px 15px rgb(96 165 250), 25px 0 30px 15px rgb(94 234 212), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 2) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(232 121 249), 0 0 30px 15px rgb(94 234 212), 25px 0 30px 15px rgb(96 165 250), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 3) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(94 234 212), 0 0 30px 15px rgb(232 121 249), 25px 0 30px 15px rgb(96 165 250), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 4) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(94 234 212), 0 0 30px 15px rgb(96 165 250), 25px 0 30px 15px rgb(232 121 249), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 5) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(96 165 250), 0 0 30px 15px rgb(94 234 212), 25px 0 30px 15px rgb(232 121 249), 70px 0 45px 20px #ffffff;
+            }
+            .rainbow:nth-child(6n + 6) {
+                box-shadow: -70px 0 45px 20px #ffffff, -25px 0 30px 15px rgb(96 165 250), 0 0 30px 15px rgb(232 121 249), 25px 0 30px 15px rgb(94 234 212), 70px 0 45px 20px #ffffff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background" aria-hidden="true">
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="rainbow"></div>
+        <div class="h"></div>
+        <div class="v"></div>
+    </div>
+
+    <main class="error-wrap">
+        <section class="error-box">
+            <h1>{{.Status}}</h1>
+            <p>{{.Message}} <br> Пожалуйста, попробуйте снова через несколько секунд.</p>
+            <a class="back" href="/">Вернуться в Tour Track</a>
+        </section>
+    </main>
+</body>
+</html>

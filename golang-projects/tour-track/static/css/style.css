@@ -25,6 +25,10 @@ html {
     text-size-adjust: none;
 }
 
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
 body, h1, h2, h3, h4, p,
 figure, blockquote, dl, dd {
     margin: 0;
@@ -55,7 +59,7 @@ body {
 
 .viewport {
     width: 100vw;
-    height: 100dvh;
+    height: 100vh;
     overflow: auto;
     position: relative;
     cursor: grab;
@@ -105,6 +109,7 @@ body {
 }
 
 .circle {
+    position: relative;
     background: transparent;
     border: none;
     padding: 0;
@@ -126,12 +131,27 @@ body {
     left: 0;
     z-index: 1;
     opacity: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.circle [hidden] {
+    display: none !important;
+}
+
+.circle .placeholder-icon {
+    width: 44%;
+    height: 44%;
+    fill: #0284c7;
+    opacity: 0.75;
+    pointer-events: none;
+    transition: transform 0.25s ease, fill 0.25s ease;
 }
 
 .circle:hover {
     transform: scale(1.2);
     box-shadow: 0 0 0 4px var(--hover-glow, rgba(255, 217, 122, 0.9)), 0 8px 20px rgba(0, 0, 0, 0.5);
     z-index: 11;
+    fill: #e11d48;
 }
 
 .circle:focus-visible {
@@ -169,6 +189,43 @@ body {
     transition: all 2s ease-in-out;
 }
 
+.arc-badge {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity 0.2s ease;
+}
+
+.arc-badge text {
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    stroke: #0b0b0f;
+    stroke-width: 2px;
+    paint-order: stroke fill;
+    stroke-linejoin: round;
+}
+
+.badge-Emerging text {
+    fill: #94a3b8;
+}
+
+.badge-Active text {
+    fill: #38bdf8;
+}
+
+.badge-Established text {
+    fill: #c084fc;
+}
+
+.badge-Legendary text {
+    fill: #fde047;
+    filter: drop-shadow(0 0 4px rgba(253, 224, 71, 0.7));
+}
+
 /* --- Оверлей --- */
 .overlay {
     display: none;
@@ -182,6 +239,7 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease, display 0.3s allow-discrete;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .overlay.is-active {
@@ -217,8 +275,10 @@ body {
     pointer-events: auto;
 }
 
-.details-panel h2 { margin: 0 0 10px 0; font-size: 2rem; }
-.details-panel p { margin: 5px 0; line-height: 1.4; }
+.details-panel p {
+    margin: 5px 0;
+    line-height: 1.4;
+}
 
 .center-spacer {
     width: calc(var(--circle-size) * var(--expand-scale));
@@ -437,5 +497,76 @@ body {
         opacity: 0;
         max-width: 0px;
         color: white;
+    }
+}
+
+@media (max-width: 768px) {
+    .details-panel {
+        flex-direction: column;
+        justify-content: space-between; /* Расталкивает верхний и нижний блоки к краям экрана */
+        align-items: center;
+        /* Отступы от верхнего и нижнего краёв viewport в процентах + учёт вырезов экрана */
+        padding: max(4dvh, env(safe-area-inset-top)) 16px max(4dvh, env(safe-area-inset-bottom));
+        box-sizing: border-box;
+    }
+
+    /* 1. Верхняя капсула — прижата к верхнему отступу viewport */
+    .info-left {
+        order: 1;
+        --overlap: 0px;
+        --inner-gap: 0px;
+
+        flex: none;
+        width: 100%;
+        max-width: 380px;
+        height: auto;
+        text-align: center;
+        margin: 0;
+        padding: 14px 20px;
+        border-radius: 28px;
+        box-sizing: border-box;
+    }
+
+    .info-left h2 {
+        font-size: 1.25rem;
+        margin: 0 0 4px;
+    }
+
+    /* 2. Центральный спейсер с кнопкой "Подробнее" под кругом */
+    .center-spacer {
+        order: 2;
+        width: calc(var(--circle-size) * var(--expand-scale));
+        height: calc(var(--circle-size) * var(--expand-scale));
+        background: transparent;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding-bottom: 4px;
+        box-sizing: border-box;
+    }
+
+    /* 3. Нижняя капсула — прижата к нижнему отступу viewport */
+    .info-right {
+        order: 3;
+        --overlap: 0px;
+        --inner-gap: 0px;
+
+        flex: none;
+        width: 100%;
+        max-width: 380px;
+        height: auto;
+        max-height: 22dvh;
+        overflow-y: auto;
+        text-align: center;
+        margin: 0;
+        padding: 14px 20px;
+        border-radius: 28px;
+        box-sizing: border-box;
+    }
+
+    .details-panel p {
+        font-size: 0.92rem;
+        margin: 2px 0;
     }
 }

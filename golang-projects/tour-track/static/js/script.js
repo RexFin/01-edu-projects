@@ -1,39 +1,44 @@
-const mockArtistsData = [
-  {
-    "id": 1,
-    "image": "https://groupietrackers.01edu.ai/api/images/queen.jpeg",
-    "name": "Queen",
-    "members": ["Freddie Mercury", "Brian May", "John Daecon", "Roger Meddows-Taylor", "Mike Grose", "Barry Mitchell", "Doug Fogie"],
-    "creationDate": 1970,
-    "firstAlbum": "14-12-1973"
-  }
-];
-
 function arrangeRadialHoneycomb() {
     const viewport = document.getElementById('viewport');
     const container = document.getElementById('hex-grid');
     const circles = container.querySelectorAll('.circle');
     if (circles.length === 0) return;
 
-    // --- настройка сетки ---
-    const size = 140;      
-    const gapX = -10;      
-    const gapY = 10;       
+    const screenW = window.innerWidth;
+    let size = 140;
+    let expandScale = 2;
 
-    // --- настройка пустого пространство ---
-    const paddingX = 1000;
-    const paddingY = 500;
+    if (screenW <= 480) {
+        size = 84;
+        expandScale = 1.5;
+    } else if (screenW <= 768) {
+        size = 105;
+        expandScale = 1.7;
+    } else if (screenW <= 1024) {
+        size = 120;
+        expandScale = 1.85;
+    }
+
+    document.documentElement.style.setProperty('--circle-size', `${size}px`);
+    document.documentElement.style.setProperty('--expand-scale', expandScale);
+
+    const ratio = size / 140;
+    const gapX = Math.round(-10 * ratio);
+    const gapY = Math.round(10 * ratio);
+    
+    const paddingX = screenW <= 768 ? Math.max(200, Math.round(screenW * 0.5)) : 1200;
+    const paddingY = screenW <= 768 ? Math.max(200, Math.round(window.innerHeight * 0.4)) : 500;
 
     const dx = size + gapX;
     const dy = size + gapY;
 
     const dirs = [
-        { dx: dx,  dy: dy/2 },   
-        { dx: 0,   dy: dy },     
-        { dx: -dx, dy: dy/2 },   
-        { dx: -dx, dy: -dy/2 },  
-        { dx: 0,   dy: -dy },    
-        { dx: dx,  dy: -dy/2 }   
+        { dx: dx,  dy: dy / 2 },
+        { dx: 0,   dy: dy },
+        { dx: -dx, dy: dy / 2 },
+        { dx: -dx, dy: -dy / 2 },
+        { dx: 0,   dy: -dy },
+        { dx: dx,  dy: -dy / 2 }
     ];
 
     const positions = [];
@@ -47,21 +52,21 @@ function arrangeRadialHoneycomb() {
             while (index >= 3 * r * (r + 1) + 1) {
                 r++;
             }
-            
+
             const startIndex = 3 * r * (r - 1) + 1;
             const posInRing = index - startIndex;
-            
+
             x = 0;
             y = -r * dy;
-            
+
             const side = Math.floor(posInRing / r);
             const steps = posInRing % r;
-            
+
             for (let i = 0; i < side; i++) {
                 x += r * dirs[i].dx;
                 y += r * dirs[i].dy;
             }
-            
+
             if (side < 6) {
                 x += steps * dirs[side].dx;
                 y += steps * dirs[side].dy;
@@ -70,7 +75,6 @@ function arrangeRadialHoneycomb() {
         positions.push({ x, y, el: circle });
     });
 
-
     let maxDistX = 0;
     let maxDistY = 0;
 
@@ -78,7 +82,6 @@ function arrangeRadialHoneycomb() {
         if (Math.abs(pos.x) > maxDistX) maxDistX = Math.abs(pos.x);
         if (Math.abs(pos.y) > maxDistY) maxDistY = Math.abs(pos.y);
     });
-
 
     const offsetX = maxDistX + paddingX;
     const offsetY = maxDistY + paddingY;
@@ -226,33 +229,26 @@ function enableDragToScroll() {
         const artistId = parseInt(rawId, 10);
 
         console.log(`Успешный клик по артисту ID: ${artistId}`);
+        
+        const { id, name, creation, album, members, activity } = button.dataset;
 
-        const artist = mockArtistsData.find(a => a.id === artistId);
+        detailsPanel.innerHTML = `
+            <div class="info-side info-left">
+            <h2 class="days-one-regular">${name}</h2>
+            <span class="badge badge-${activity} neucha-regular"><strong>Статус:</strong> ${activity}</span>
+                <p class="neucha-regular"><strong>Год создания:</strong> ${creation}</p>
+                <p class="neucha-regular"><strong>Первый альбом:</strong> ${album}</p>
+            </div>
 
-        if (artist) {
-            detailsPanel.innerHTML = `
-                <div class="info-side info-left">
-                <h2 class="days-one-regular">${artist.name}</h2>
-                <p class="neucha-regular"><strong>Год создания:</strong> ${artist.creationDate}</p>
-                <p class="neucha-regular"><strong>Первый альбом:</strong> ${artist.firstAlbum}</p>
-                </div>
+            <div class="center-spacer">
+                <a href="/artist?id=${id}" class="action-btn days-one-regular">Подробнее</a>
+            </div>
 
-                <div class="center-spacer">
-                    <a href="/artist/${artist.id}" class="action-btn days-one-regular">Подробнее</a>
-                </div>
-
-                <div class="info-side info-right">
+            <div class="info-side info-right">
                 <p class="neucha-regular"><strong>Участники:</strong></p>
-                <p class="neucha-regular">${artist.members.join(', ')}</p>
-                </div>
-            `;
-        } else {
-            detailsPanel.innerHTML = `
-                <div class="info-side info-left"><h2>Загрузка...</h2></div>
-                <div class="center-spacer"></div>
-                <div class="info-side info-right"><p>ID: ${artistId}</p></div>
-            `;
-        }
+                <p class="neucha-regular">${members}</p>
+            </div>
+        `;
 
         button.classList.add('is-expanded');
         overlay.classList.add('is-active');
