@@ -229,7 +229,8 @@ function enableDragToScroll() {
         const artistId = parseInt(rawId, 10);
 
         console.log(`Успешный клик по артисту ID: ${artistId}`);
-        
+
+        // Внутри обработчика клика по circle:
         const { id, name, creation, album, members, activity } = button.dataset;
 
         detailsPanel.innerHTML = `
